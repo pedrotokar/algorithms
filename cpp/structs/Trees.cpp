@@ -20,6 +20,8 @@ template <typename T> NodeTree<T>* bfsSearchNode(NodeTree<T>*, T);
 template <typename T> void dfsTraversePreOrder(NodeTree<T>*);
 template <typename T> void dfsTraverseInOrder(NodeTree<T>*);
 template <typename T> void dfsTraversePostOrder(NodeTree<T>*);
+template <typename T> int dfsFlatten(T[], NodeTree<T>*, int);
+
 template <typename T> void bfsTraverse(NodeTree<T>*);
 
 //Queue structure to help in traversing algorithms
@@ -165,10 +167,20 @@ void dfsTraversePostOrder(NodeTree<T>* ptrStartingNode){
 }
 
 template <typename T>
+int dfsFlatten(T vector[], NodeTree<T>* ptrStartingNode, int iIndex){
+    if (ptrStartingNode != nullptr){
+        iIndex = dfsFlatten(vector, ptrStartingNode->ptrLeft, iIndex);
+        vector[iIndex] = ptrStartingNode->iPayload;
+        iIndex++;
+        iIndex = dfsFlatten(vector, ptrStartingNode->ptrRight, iIndex);
+    }
+    return iIndex;
+}
+
+template <typename T>
 void bfsTraverse(NodeTree<T>* startingNode){
     if (startingNode == nullptr) return;
     
-    // Parte 1 do Trabalho: Alterar para Lista Encadeada - feita
     NodeQueue<T>* ptrQueue = nullptr;
     insertEndQueue(&ptrQueue, startingNode);
     
@@ -242,5 +254,6 @@ template NodeTree<int>* bfsSearchNode(NodeTree<int>*, int);
 template void dfsTraversePreOrder(NodeTree<int>*);
 template void dfsTraverseInOrder(NodeTree<int>*);
 template void dfsTraversePostOrder(NodeTree<int>*);
+template int dfsFlatten(int[], NodeTree<int>*, int);
 template void bfsTraverse(NodeTree<int>*);
 template void freeTree(NodeTree<int>*);
