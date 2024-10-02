@@ -1,8 +1,6 @@
-#include <algorithm>
 #include <iostream>
 #include "sorting.h"
 #include "selection.h"
-#include <structs/Heaps.h>
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
 using namespace std;
@@ -92,20 +90,20 @@ template int MOMSelect(int[], int, int, int);
 template float quickSelect(float[], int, int, int);
 template float MOMSelect(float[], int, int, int);
 
-int main(){
-    float vector[] = {10.9, 2.3, 13, 6, 78, 9, 4, 3, 14, 39, 3, 1, 5, 12}; //14 elementos
-    int intvector[] = {1, 2, 4, 2, 3, 4, 4, 2, 3, 1, 3, 4, 1, 2, 3, 4, 1, 3, 4, 1, 3, 4, 1, 2, 3, 4, 1, 4, 1, 3, 2,4 };
-    int biggervector[] = {10, 2, 13, 6, 78, 9, 4, 3, 14, 39, 3, 1, 5, 12, 2, 6, 34 ,13, 98,2, 3,48, 17, 2,8, 23,47 };
-    int temp[] = {1, 1, 2, 5, 20, 21};
-    //printList(vector, 14);
-    //printList(intvector, 32);
-    printList(biggervector, 27);
-    //cout << quickSelect(vector, 0, 14, 8) << endl;
-    //cout << MOMSelect(biggervector, 0, 27, 9) << endl;
-    //cout << ex10(biggervector, 0, 27, 27) << endl;
-    //cout << ex10(temp, 0, 6, 6) << endl;
-    //quickSort(biggervector, 0, 27);
-    //printList(vector, 14);
-    //printList(intvector, 32);
-    printList(biggervector, 27);
-}
+// int main(){
+//     float vector[] = {10.9, 2.3, 13, 6, 78, 9, 4, 3, 14, 39, 3, 1, 5, 12}; //14 elementos
+//     int intvector[] = {1, 2, 4, 2, 3, 4, 4, 2, 3, 1, 3, 4, 1, 2, 3, 4, 1, 3, 4, 1, 3, 4, 1, 2, 3, 4, 1, 4, 1, 3, 2,4 };
+//     int biggervector[] = {10, 2, 13, 6, 78, 9, 4, 3, 14, 39, 3, 1, 5, 12, 2, 6, 34 ,13, 98,2, 3,48, 17, 2,8, 23,47 };
+//     int temp[] = {1, 1, 2, 5, 20, 21};
+//     //printList(vector, 14);
+//     //printList(intvector, 32);
+//     printList(biggervector, 27);
+//     //cout << quickSelect(vector, 0, 14, 8) << endl;
+//     //cout << MOMSelect(biggervector, 0, 27, 9) << endl;
+//     //cout << ex10(biggervector, 0, 27, 27) << endl;
+//     //cout << ex10(temp, 0, 6, 6) << endl;
+//     //quickSort(biggervector, 0, 27);
+//     //printList(vector, 14);
+//     //printList(intvector, 32);
+//     printList(biggervector, 27);
+// }
