@@ -2,7 +2,6 @@
 #define selectionH
 
 //Auxiliary algorithms
-template <typename T> void swap(T[], int, int);
 template <typename T> T findMedian(T[], int, int);
 
 //Selection algorithms
