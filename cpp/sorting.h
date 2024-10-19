@@ -5,7 +5,7 @@
 template <typename T> void swap(T[], int, int);
 template <typename T> void mergeArrays(T[], int, int);
 template <typename T> int partitionate(T[], int, int);
-template <typename T> int partitionate(T[], int, int, T);
+template <typename T> int partitionateByElement(T[], int, int, T);
 
 //Sorting algorithms
 template <typename T> void bubbleSort(T[], int);

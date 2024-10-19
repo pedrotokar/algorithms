@@ -9,7 +9,7 @@ using namespace std;
 template <typename T> void swap(T[], int, int);
 template <typename T> void mergeArrays(T[], int, int);
 template <typename T> int partitionate(T[], int, int);
-template <typename T> int partitionate(T[], int, int, T);
+template <typename T> int partitionateByElement(T[], int, int, T);
 
 //Sorting algorithms
 template <typename T> void bubbleSort(T[], int);
@@ -126,7 +126,7 @@ void mergeArrays(T vector[], int iStart, int iEnd){
     }
 }
 
-//Average case complexity: theta(nlogn) - each use has theta(n) and it's in a tree
+//Average case complexity: theta(nlogn) - each call use merge which is theta(n), and it s in a recurrence of the form T(n) = 2T(n/2)
 //Worst case complexity: theta(nlogn)
 //Best case complexity: theta(nlogn)
 template <typename T>
@@ -143,7 +143,8 @@ void mergeSort(T vector[], int iStart, int iEnd){
 //Worst case complexity: theta(n) - always runs independent of the vector configuration
 //Best case complexity: theta(n)
 template <typename T>
-int partitionate(T vector[], int iStart, int iLast){
+int partitionate(T vector[], int iStart, int iEnd){ //returns pivot index
+    int iLast = iEnd - 1;
     int j = iStart;
     for (int i = iStart; i < iLast; i++){
         if (vector[i] <= vector[iLast]){
@@ -159,17 +160,17 @@ int partitionate(T vector[], int iStart, int iLast){
 //Worst case complexity: theta(n) - independent of the search, will do theta(n) partitionate
 //Best case complexity: theta(n)
 template <typename T>
-int partitionate(T vector[], int iStart, int iLast, T iPartition){ //Envelops above function and do a search before calling it - TODO: maybe can reduce operations needed in future
+int partitionateByElement(T vector[], int iStart, int iEnd, T iPartition){ //Envelops above function and do a search before calling it - TODO: maybe can reduce operations needed in future
     int j = -1;
-    for (int i = iStart; i <= iLast; i++){
+    for (int i = iStart; i < iEnd; i++){
         if (vector[i] == iPartition){
             j = i;
             break;
         }
     }
     if(j == -1) return -1;
-    swap(vector, j, iLast);
-    return partitionate(vector, iStart, iLast);
+    swap(vector, j, iEnd - 1);
+    return partitionate(vector, iStart, iEnd); //returns element new index
 }
 
 
@@ -179,7 +180,7 @@ int partitionate(T vector[], int iStart, int iLast, T iPartition){ //Envelops ab
 template <typename T>
 void quickSort(T vector[], int iStart, int iEnd){
     while (iStart < iEnd - 1){
-        int iMid = partitionate(vector, iStart, iEnd - 1);
+        int iMid = partitionate(vector, iStart, iEnd); //This function, in pratical use, is different and tries to always partitionate closer to the half of the array
         if (iMid - iStart < iEnd - iMid) { //Computing the shortest first, then goes back and computes the greater (withouth needing to call the function two times)
             quickSort(vector, iStart, iMid);
             iStart = iMid;
@@ -205,24 +206,6 @@ void heapSort(T vector[], int iLength){
         maxHeapify(vector, 0, i);
     }
 }
-
-/* //TODO: implement
- t e*mplate <typename T>
- void mergeMultiple(T vectors[], int iLengths[], int iCount){
- int iSize = 0;
- for(int i = 0; i < iCount; i++) iSize = iSize + iLengths[i];
- //int iSize = iCount * iLength;
- T sortedVector[iSize];
- T auxiliary[iCount];
- for (int i = 0; i < iCount; i++){
-     for (int j = 0; j < iLengths[i]; j++){
-         //float temp = vectors[i *iLength + j];
-         //sortedVector[iLength * i + j] = &temp;
-         }
-         printList(sortedVector, iSize);
-         }
-         }
-         */
 
 //Average case complexity: theta(n) iters through vector and aux array k a fixed number of times - actually it's theta(n + k)
 //Worst case complexity: theta(n)
@@ -253,11 +236,11 @@ void countingSort(int vector[], int iLength, int k){ //Not a template cause the 
 template void swap(int[], int, int);
 template void mergeArrays(int[], int, int);
 template int partitionate(int[], int, int);
-template int partitionate(int[], int, int, int);
+template int partitionateByElement(int[], int, int, int);
 template void swap(float[], int, int);
 template void mergeArrays(float[], int, int);
 template int partitionate(float[], int, int);
-template int partitionate(float[], int, int, float);
+template int partitionateByElement(float[], int, int, float);
 
 //Sorting algorithms
 template void bubbleSort(int[], int);
@@ -275,25 +258,60 @@ template void heapSort(float[], int);
 
 //TODO: decidir padrão pra entrada de todos (com intervalos? sem? usando referencias?)
 
-// int main(){
-//     float vector[] = {10.9, 2.3, 3, 6, 78, 9, 4, 3, 14, 39, 3, 1, 5, 12}; //14 elements
-//     int intvector[] = {1, 2, 4, 2, 3, 4, 4, 2, 3, 1, 3, 4, 1, 2, 3, 4, 1, 3, 4, 1, 3, 4, 1, 2, 3, 4, 1, 4, 1, 3, 2,4 }; //32 elements
-//     float vectors[18] = {2, 3, 4, 20, 21,
-//                          1, 3, 12,
-//                          1, 10, 11, 12, 13, 14,
-//                          9, 12, 13, 15};
-//     int lengths[4] = {5, 3, 6, 4};
-//
-//     printList(vector, 14);
-//     printList(intvector, 32);
-//     //bubbleSort(vector, 14);
-//     //selectionSort(vector, 14);
-//     //insertionSort(vector, 14);
-//     //mergeSort(vector, 0, 14);
-//     //quickSort(v, 0, 14);
-//     //heapSort(vector, 14);
-//     //mergeMultiple(vectors, lengths, 4);
-//     //countingSort(intvector, 32, 4);
-//     printList(vector, 14);
-//     printList(intvector, 32);
-// }
+/* int main(){
+     //Testing
+     cout << "Bubble Sort" << endl;
+     float vector[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
+     printList(vector, 21);
+     bubbleSort(vector, 21);
+     printList(vector, 21);
+
+     cout << endl << "Selection Sort" << endl;
+     float vector1[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
+     printList(vector1, 21);
+     selectionSort(vector1, 21);
+     printList(vector1, 21);
+
+     cout << endl << "InsertionSort" << endl;
+     float vector2[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
+     printList(vector2, 21);
+     insertionSort(vector2, 21);
+     printList(vector2, 21);
+
+     cout << endl << "Merge Sort" << endl;
+     float vector3[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
+     printList(vector3, 21);
+     mergeSort(vector3, 0, 21);
+     printList(vector3, 21);
+
+     cout << endl << "Quick Sort" << endl;
+     float vector4[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
+     printList(vector4, 21);
+     quickSort(vector4, 0, 21);
+     printList(vector4, 21);
+
+     cout << endl << "Heap Sort" << endl;
+     float vector5[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
+     printList(vector5, 21);
+     heapSort(vector5, 21);
+     printList(vector5, 21);
+
+     cout << endl << "Counting Sort" << endl;
+     int intvector[] = {1, 2, 4, 2, 3, 4, 4, 5, 3, 1, 5, 4, 1, 2, 3, 4, 1, 5, 4, 1, 3, 4, 1, 2, 5, 4, 1, 4, 1, 3, 2,4 }; //32 elements
+     printList(intvector, 32);
+     countingSort(intvector, 32, 5);
+     printList(intvector, 32);
+
+
+     //printList(vector, 21);
+     //printList(intvector, 32);
+     //bubbleSort(vector, 21);
+     //selectionSort(vector, 21);
+     //insertionSort(vector, 21);
+     //mergeSort(vector, 0, 21);
+     //quickSort(v, 0, 21);
+     //heapSort(vector, 21);
+     //countingSort(intvector, 32, 4);
+     //printList(vector, 21);
+     //printList(intvector, 32);
+} */
