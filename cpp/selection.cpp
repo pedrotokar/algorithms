@@ -90,7 +90,7 @@ template int MOMSelect(int[], int, int, int);
 template float quickSelect(float[], int, int, int);
 template float MOMSelect(float[], int, int, int);
 
-int main(){
+/*int main(){
     cout << "Quick Select" << endl;
     float vector[] = {10.9, -2.3, 3, 6.12, 78, -9, 4, 3, -14, 39, 3, 1, 5.45, 12, -19,4, 0, -1, 1, 9, 12.9}; //21 elements
     printList(vector, 21);
@@ -106,4 +106,4 @@ int main(){
     cout << "elemento 11: " << MOMSelect(vector2, 0, 21, 11) << endl;
     cout << "elemento 20: " << MOMSelect(vector2, 0, 21, 20) << endl;
     printList(vector2, 21);
-}
+}*/
