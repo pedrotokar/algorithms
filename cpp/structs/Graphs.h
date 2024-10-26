@@ -33,7 +33,11 @@ public:
     bool hasPath(vertex, vertex);
     void findConnected(vertex, bool[]);
 
+    void dfs(int[]);
+    void dfsRecursive(vertex, int[], int&);
+
     bool isTopological();
+    bool hasTopologicalOrder(int[]);
 };
 
 
@@ -59,7 +63,11 @@ public:
     bool hasPath(vertex, vertex);
     void findConnected(vertex, bool[]);
 
+    void dfs(int[]);
+    void dfsRecursive(vertex, int[], int&);
+
     bool isTopological();
+    bool hasTopologicalOrder(int[]);
 };
 
 #endif
