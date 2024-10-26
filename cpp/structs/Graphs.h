@@ -29,7 +29,11 @@ public:
     void printMatrix();
 
     bool isSubGraph(GraphMatrix&);
-    bool isValidPath(vertex[], int);
+    bool isValidPath(vertex[], int, bool&);
+    bool hasPath(vertex, vertex);
+    void findConnected(vertex, bool[]);
+
+    bool isTopological();
 };
 
 
@@ -44,13 +48,18 @@ public:
     ~GraphAdjList();
     EdgeNode** edges();
 
+    bool hasEdge(vertex, vertex);
     void addEdge(vertex, vertex);
     void removeEdge(vertex, vertex);
 
     void print();
 
     bool isSubGraph(GraphAdjList&);
-    bool isValidPath(vertex[], int);
+    bool isValidPath(vertex[], int, bool&);
+    bool hasPath(vertex, vertex);
+    void findConnected(vertex, bool[]);
+
+    bool isTopological();
 };
 
 #endif

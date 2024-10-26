@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Graphs.h"
+#define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
 using namespace std;
 
@@ -93,16 +94,55 @@ bool GraphMatrix::isSubGraph(GraphMatrix& H) {
     return true;
 }
 
-bool GraphMatrix::isValidPath(vertex path[], int iLength){
+//theta(n)
+bool GraphMatrix::isValidPath(vertex path[], int iLength, bool& hasCycle){
     if (iLength < 2) return false;
+    bool visited[m_numVertices];
+    for (vertex i = 0; i <m_numVertices; i++) {visited[i] = false;}
+    visited[path[0]] = true;
     for(int i = 1; i < iLength; i++){
+        if(visited[path[i]]) hasCycle = true;
         if(!hasEdge(path[i-1],path[i])){
             return false;
+        }
+        visited[path[i]] = true;
+    }
+    return true;
+}
+
+
+//theta(len(V) + len(E))
+void GraphMatrix::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex that can be reached starting from v1
+    hasPath[v1] = true;
+    for (vertex v2 = 0; v2 < m_numVertices; v2++){
+        if(hasEdge(v1, v2) && !hasPath[v2]){
+            findConnected(v2, hasPath);
+        }
+    }
+}
+
+//theta(len(V) + len(E)) Just envelops above function to get the result from one specific vertex
+bool GraphMatrix::hasPath(vertex v1, vertex v2){
+    bool visited[m_numVertices];
+    for (vertex v = 0; v < m_numVertices; v++){
+        visited[v] = false;
+    }
+    findConnected(v1, visited);
+    return visited[v2];
+}
+
+bool GraphMatrix::isTopological(){
+    for(vertex i = 0; i < m_numVertices; i++){
+        for(vertex j; j < i; j++){
+            if(hasEdge(i, j)){
+                return false;
+            }
         }
     }
     return true;
 }
 
+//Implements everything but now for adjacency list graphs-------------------------------------------------------
 
 GraphAdjList::GraphAdjList(int numVertices):
 m_numVertices(numVertices), m_numEdges(0), m_edges(nullptr){
@@ -125,6 +165,18 @@ GraphAdjList::~GraphAdjList(){
 }
 
 EdgeNode** GraphAdjList::edges() {return m_edges;}
+
+//O(len(V))
+bool GraphAdjList::hasEdge(vertex v1, vertex v2){
+    EdgeNode* node = m_edges[v1];
+    while(node){
+        if(node->vert == v2){
+            return true;
+        }
+        node = node->next;
+    }
+    return false;
+}
 
 //O(len(V)) because in worst case it adds on the end of the list
 void GraphAdjList::addEdge(vertex v1, vertex v2){
@@ -215,9 +267,15 @@ bool GraphAdjList::isSubGraph(GraphAdjList& H) {
 }
 
 //O(n * len(V)) because it checks, for each step in the path, if an edge exists. Checking the existence of an edge can take len(V)
-bool GraphAdjList::isValidPath(vertex path[], int iLength){
+bool GraphAdjList::isValidPath(vertex path[], int iLength, bool& hasCycle){
     if (iLength < 2) return false;
+    bool visited[m_numVertices];
+    for(vertex i = 0; i <m_numVertices; i++) {visited[i] = false;}
+    visited[path[0]] = true;
+
     for(int i = 1; i < iLength; i++){
+        if (visited[path[i]]) hasCycle = true;
+
         EdgeNode* node = m_edges[path[i-1]];
         bool exists = false;
         while(node){
@@ -230,13 +288,56 @@ bool GraphAdjList::isValidPath(vertex path[], int iLength){
         if(!exists){
             return false;
         }
+        visited[path[i]] = true;
     }
     return true;
 }
 
+
+void GraphAdjList::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex that can be reached starting from v1
+    hasPath[v1] = true;
+    EdgeNode* node = m_edges[v1];
+    while(node){
+        if(!hasPath[node->vert]){
+            findConnected(node->vert, hasPath);
+        }
+        node = node->next;
+    }
+}
+
+/////////theta(len(V) + len(E)) Just envelops above function to get the result from one specific vertex
+bool GraphAdjList::hasPath(vertex v1, vertex v2){
+    bool visited[m_numVertices];
+    for (vertex v = 0; v < m_numVertices; v++){
+        visited[v] = false;
+    }
+    findConnected(v1, visited);
+    return visited[v2];
+}
+
+
+//O(len(V)^2)
+bool GraphAdjList::isTopological(){ //If the list is always ordered, complexity can be lower
+    for (vertex i = 0; i <m_numVertices; i++){
+        EdgeNode* node = m_edges[i];
+        while(node){
+            if(i >= node->vert){
+                return false;
+            }
+            node = node->next;
+        }
+    }
+    return true;
+}
+
+
 int main(){
     vertex path1[] = {0, 2, 4, 1};
     vertex path2[] = {0, 2, 4, 1, 5};
+    vertex path3[] = {0, 2, 4, 1, 4, 1};
+    bool p1cycle;
+    bool p2cycle;
+    bool p3cycle;
 
     GraphMatrix g1 = GraphMatrix(6);
     g1.addEdge(0, 1);
@@ -250,8 +351,10 @@ int main(){
     g1.print();
     g1.printMatrix();
 
-    cout << "path1 é caminho? " << g1.isValidPath(path1, 4) << endl;
-    cout << "path2 é caminho? " << g1.isValidPath(path2, 5) << endl;
+
+    cout << "path1 é caminho? " << g1.isValidPath(path1, 4, p1cycle) << " Com ciclo? " << p1cycle << endl;
+    cout << "path2 é caminho? " << g1.isValidPath(path2, 5, p2cycle) << " Com ciclo? " << p2cycle << endl;
+    cout << "path3 é caminho? " << g1.isValidPath(path3, 6, p3cycle) << " Com ciclo? " << p3cycle << endl;
 
     GraphMatrix g2 = GraphMatrix(6);
     g2.addEdge(0, 1);
@@ -266,6 +369,18 @@ int main(){
 
     cout << "novo g2 é subgrafo? " << g1.isSubGraph(g2) << endl;
 
+    cout << "tem caminho de 0 a 5? " << g1.hasPath(0, 5) << endl;
+    cout << "tem caminho de 5 a 2? " << g1.hasPath(5, 2) << endl;
+    cout << "tem caminho de 1 a 4? " << g1.hasPath(1, 4) << endl;
+    bool hasPathTo[6];
+    for(int i = 0; i < 6; i++){hasPathTo[i] = false;}
+    g1.findConnected(1, hasPathTo);
+    printList(hasPathTo, 6);
+
+    cout << endl << "É topológico? " << g1.isTopological() << endl;
+    g1.removeEdge(4, 1);
+    cout << endl << "Agora é topológico? " << g1.isTopological() << endl;
+
     g1.removeEdge(0, 1);
     g1.removeEdge(0, 2);
     g1.removeEdge(1, 3);
@@ -275,11 +390,12 @@ int main(){
     g1.removeEdge(4, 5);
     g1.removeEdge(4, 1);
     g1.removeEdge(4, 5);
-    g1.removeEdge(4, 1);
     g1.print();
     g1.printMatrix();
 
     cout << endl;
+
+
 
     //testing everything again but for adjacency list graphs
 
@@ -294,8 +410,9 @@ int main(){
     g3.addEdge(4, 1);
     g3.print();
 
-    cout << "path1 é caminho? " << g3.isValidPath(path1, 4) << endl;
-    cout << "path2 é caminho? " << g3.isValidPath(path2, 5) << endl;
+    cout << "path1 é caminho? " << g3.isValidPath(path1, 4, p1cycle) << " Com ciclo? " << p1cycle << endl;
+    cout << "path2 é caminho? " << g3.isValidPath(path2, 5, p2cycle) << " Com ciclo? " << p2cycle << endl;
+    cout << "path3 é caminho? " << g3.isValidPath(path3, 6, p3cycle) << " Com ciclo? " << p3cycle << endl;
 
     GraphAdjList g4 = GraphAdjList(6);
     g4.addEdge(0, 1);
@@ -309,6 +426,17 @@ int main(){
     g4.addEdge(3, 5);
 
     cout << "novo g4 é subgrafo? " << g3.isSubGraph(g4) << endl;
+
+    cout << "tem caminho de 0 a 5? " << g3.hasPath(0, 5) << endl;
+    cout << "tem caminho de 5 a 2? " << g3.hasPath(5, 2) << endl;
+    cout << "tem caminho de 1 a 4? " << g3.hasPath(1, 4) << endl;
+    for(int i = 0; i < 6; i++){hasPathTo[i] = false;}
+    g3.findConnected(1, hasPathTo);
+    printList(hasPathTo, 6);
+
+    cout << endl << "É topológico? " << g3.isTopological() << endl;
+    g3.removeEdge(4, 1);
+    cout << endl << "Agora é topológico? " << g3.isTopological() << endl;
 
     g3.removeEdge(0, 1);
     g3.removeEdge(0, 2);
