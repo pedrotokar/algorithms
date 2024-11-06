@@ -25,19 +25,19 @@ public:
     void addEdge(vertex, vertex); //theta(1)
     void removeEdge(vertex, vertex); //theta(1)
 
-    void print();
-    void printMatrix();
+    void print(); //theta(V^2)
+    void printMatrix(); //theta(V^2)
 
-    bool isSubGraph(GraphMatrix&);
-    bool isValidPath(vertex[], int, bool&);
-    bool hasPath(vertex, vertex);
-    void findConnected(vertex, bool[]);
+    bool isSubGraph(GraphMatrix&); //theta(V^2)
+    bool isValidPath(vertex[], int, bool&); //theta(n)
 
-    void dfs(int[]);
-    void dfsRecursive(vertex, int[], int&);
+    bool hasPath(vertex, vertex); //theta(V^2) - envelops below function
+    void findConnected(vertex, bool[]); //theta(V^2)
+    void dfs(int[], int[], int[]);
+    void dfsRecursive(vertex, int[], int&, int[], int&, int[]);
 
-    bool isTopological();
-    bool hasTopologicalOrder(int[]);
+    bool isTopological(); //theta(V^2)
+    bool hasTopologicalOrder(int[]); //theta(V^2)
 };
 
 
@@ -52,22 +52,22 @@ public:
     ~GraphAdjList();
     EdgeNode** edges();
 
-    bool hasEdge(vertex, vertex);
-    void addEdge(vertex, vertex);
-    void removeEdge(vertex, vertex);
+    bool hasEdge(vertex, vertex); //O(V)
+    void addEdge(vertex, vertex); //O(V)
+    void removeEdge(vertex, vertex); //O(V)
 
-    void print();
+    void print(); //O(V + E)
 
-    bool isSubGraph(GraphAdjList&);
-    bool isValidPath(vertex[], int, bool&);
-    bool hasPath(vertex, vertex);
-    void findConnected(vertex, bool[]);
+    bool isSubGraph(GraphAdjList&); //O(E + E')
+    bool isValidPath(vertex[], int, bool&); //O(n * V)
 
-    void dfs(int[]);
-    void dfsRecursive(vertex, int[], int&);
+    bool hasPath(vertex, vertex); //O(V + E) - envelops below function
+    void findConnected(vertex, bool[]); //O(V + E)
+    void dfs(int[], int[], int[]);
+    void dfsRecursive(vertex, int[], int&, int[], int&, int[]);
 
-    bool isTopological();
-    bool hasTopologicalOrder(int[]);
+    bool isTopological(); //theta(V + E)
+    bool hasTopologicalOrder(int[]); //theta(V + E)
 };
 
 #endif

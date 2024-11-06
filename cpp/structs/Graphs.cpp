@@ -55,7 +55,7 @@ void GraphMatrix::removeEdge(vertex v1, vertex v2){
     }
 }
 
-//theta(len(V)^2)
+//theta(V^2)
 void GraphMatrix::print(){
     cout << m_numEdges << " [ ";
     for (vertex i = 0; i < m_numVertices; i++){
@@ -69,7 +69,7 @@ void GraphMatrix::print(){
     cout << "]" << endl;
 }
 
-//theta(len(V)^2)
+//theta(V^2)
 void GraphMatrix::printMatrix(){
     for (vertex i = 0; i < m_numVertices; i++){
         for (vertex j = 0; j <m_numVertices; j++){
@@ -79,7 +79,7 @@ void GraphMatrix::printMatrix(){
     }
 }
 
-//theta(len(V)^2)
+//theta(V^2)
 bool GraphMatrix::isSubGraph(GraphMatrix& H) {
     int** hEdges = H.edges();
     for (vertex i = 0; i < m_numVertices; i++){
@@ -110,60 +110,6 @@ bool GraphMatrix::isValidPath(vertex path[], int iLength, bool& hasCycle){
     return true;
 }
 
-
-//theta(len(V) + len(E))
-void GraphMatrix::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex that can be reached starting from v1
-    hasPath[v1] = true;
-    for (vertex v2 = 0; v2 < m_numVertices; v2++){
-        if(hasEdge(v1, v2) && !hasPath[v2]){
-            findConnected(v2, hasPath);
-        }
-    }
-}
-
-//theta(len(V) + len(E)) Just envelops above function to get the result from one specific vertex
-bool GraphMatrix::hasPath(vertex v1, vertex v2){
-    bool visited[m_numVertices];
-    for (vertex v = 0; v < m_numVertices; v++){
-        visited[v] = false;
-    }
-    findConnected(v1, visited);
-    return visited[v2];
-}
-
-void GraphMatrix::dfsRecursive(vertex v1, int preOrder[], int& depth){
-    preOrder[v1] = depth++;
-    for (vertex v2 = 0; v2 < m_numVertices; v2++){
-        if(hasEdge(v1, v2) && preOrder[v2] == -1){
-            dfsRecursive(v2, preOrder, depth);
-        }
-    }
-}
-
-void GraphMatrix::dfs(int preOrder[]){
-    int counter = 0;
-    for (vertex v = 0; v < m_numVertices; v++){
-        preOrder[v] = -1;
-    }
-    for (vertex v = 0; v < m_numVertices; v++){
-        int depth = 0;
-        if(preOrder[v] == -1){
-            dfsRecursive(v, preOrder, depth);
-        }
-    }
-}
-
-bool GraphMatrix::isTopological(){
-    for(vertex i = 0; i < m_numVertices; i++){
-        for(vertex j = 0; j < i; j++){
-            if(hasEdge(i, j)){
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
 //Implements everything but now for adjacency list graphs-------------------------------------------------------
 
 GraphAdjList::GraphAdjList(int numVertices):
@@ -188,7 +134,7 @@ GraphAdjList::~GraphAdjList(){
 
 EdgeNode** GraphAdjList::edges() {return m_edges;}
 
-//O(len(V))
+//O(V)
 bool GraphAdjList::hasEdge(vertex v1, vertex v2){
     EdgeNode* node = m_edges[v1];
     while(node){
@@ -200,7 +146,7 @@ bool GraphAdjList::hasEdge(vertex v1, vertex v2){
     return false;
 }
 
-//O(len(V)) because in worst case it adds on the end of the list
+//O(V) because in worst case it adds on the end of the list
 void GraphAdjList::addEdge(vertex v1, vertex v2){
     if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices){
         EdgeNode* node = m_edges[v1]; //Get the list head of edges for that vertex
@@ -230,7 +176,7 @@ void GraphAdjList::addEdge(vertex v1, vertex v2){
     }
 }
 
-//O(len(V)) because in worst case it goes trought every edge in a vertex
+//O(V) because in worst case it goes trought every edge in a vertex
 void GraphAdjList::removeEdge(vertex v1, vertex v2){
     if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices){
         EdgeNode* node = m_edges[v1];
@@ -254,6 +200,7 @@ void GraphAdjList::removeEdge(vertex v1, vertex v2){
     }
 }
 
+//O(V + E)
 void GraphAdjList::print(){
     cout << m_numEdges << " [ ";
     for (vertex i = 0; i < m_numVertices; i++){
@@ -266,7 +213,7 @@ void GraphAdjList::print(){
     cout << "]" << endl;
 }
 
-//O(len(E) + len(E')) bacause it passes trhough each edge of the two graphs
+//O(E + E') bacause it passes through each edge of the two graphs
 bool GraphAdjList::isSubGraph(GraphAdjList& H) {
     EdgeNode** hEdges = H.edges();
     for (vertex i = 0; i < m_numVertices; i++){
@@ -288,7 +235,7 @@ bool GraphAdjList::isSubGraph(GraphAdjList& H) {
     return true;
 }
 
-//O(n * len(V)) because it checks, for each step in the path, if an edge exists. Checking the existence of an edge can take len(V)
+//O(n * V) because it checks, for each step in the path, if an edge exists. Checking the existence of an edge can take len(V)
 bool GraphAdjList::isValidPath(vertex path[], int iLength, bool& hasCycle){
     if (iLength < 2) return false;
     bool visited[m_numVertices];
@@ -314,67 +261,6 @@ bool GraphAdjList::isValidPath(vertex path[], int iLength, bool& hasCycle){
     }
     return true;
 }
-
-
-void GraphAdjList::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex that can be reached starting from v1
-    hasPath[v1] = true;
-    EdgeNode* node = m_edges[v1];
-    while(node){
-        if(!hasPath[node->vert]){
-            findConnected(node->vert, hasPath);
-        }
-        node = node->next;
-    }
-}
-
-bool GraphAdjList::hasPath(vertex v1, vertex v2){
-    bool visited[m_numVertices];
-    for (vertex v = 0; v < m_numVertices; v++){
-        visited[v] = false;
-    }
-    findConnected(v1, visited);
-    return visited[v2];
-}
-
-void GraphAdjList::dfsRecursive(vertex v1, int preOrder[], int& depth){
-    preOrder[v1] = depth++;
-    EdgeNode* node = m_edges[v1];
-    while(node){
-        if(preOrder[node->vert] == -1){
-            dfsRecursive(node->vert, preOrder, depth);
-        }
-        node = node->next;
-    }
-}
-
-void GraphAdjList::dfs(int preOrder[]){
-    int counter = 0;
-    for (vertex v = 0; v < m_numVertices; v++){
-        preOrder[v] = -1;
-    }
-    for (vertex v = 0; v < m_numVertices; v++){
-        int depth = 0;
-        if(preOrder[v] == -1){
-            dfsRecursive(v, preOrder, depth);
-        }
-    }
-}
-
-
-//O(len(V)^2)
-bool GraphAdjList::isTopological(){ //If the list is always ordered, complexity can be lower
-    for (vertex i = 0; i <m_numVertices; i++){
-        EdgeNode* node = m_edges[i];
-        while(node){
-            if(i >= node->vert){
-                return false;
-            }
-            node = node->next;
-        }
-    }
-    return true;
-}
-
 
 int main(){
     vertex path1[] = {0, 2, 4, 1};
@@ -422,14 +308,40 @@ int main(){
     g1.findConnected(1, hasPathTo);
     printList(hasPathTo, 6);
 
+    int topologicalOrdering[6];
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "É topológico? " << g1.isTopological() << endl;
+    cout << "Tem ordenação topológica? " << g1.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+    g1.removeEdge(4, 1);
+    cout << "Agora é topológico? " << g1.isTopological() << endl << endl;
+
+    GraphMatrix g3 = GraphMatrix(6);
+    g3.addEdge(5, 0);
+    g3.addEdge(5, 3);
+    g3.addEdge(5, 4);
+    g3.addEdge(4, 2);
+    g3.addEdge(3, 0);
+    g3.addEdge(3, 1);
+    g3.addEdge(2, 0);
+    g3.addEdge(2, 1);
+
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "g3 tem ordenação topológica? " << g3.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+
     cout << endl << "DFS: ";
     int preOrder[6];
-    g1.dfs(preOrder);
+    int postOrder[6];
+    int parents[6];
+    g1.dfs(preOrder, postOrder, parents);
+    cout << endl << "Pré ordem: ";
     printList(preOrder, 6);
+    cout << "Pós ordem: ";
+    printList(postOrder, 6);
+    cout << "Hierarquia: ";
+    printList(parents, 6);
 
-    cout << endl << "É topológico? " << g1.isTopological() << endl;
-    g1.removeEdge(4, 1);
-    cout << "Agora é topológico? " << g1.isTopological() << endl;
 
     g1.removeEdge(0, 1);
     g1.removeEdge(0, 2);
@@ -453,59 +365,84 @@ int main(){
     p2cycle = false;
     p3cycle = false;
 
-    GraphAdjList g3 = GraphAdjList(6);
-    g3.addEdge(0, 1);
-    g3.addEdge(0, 2);
-    g3.addEdge(1, 3);
-    g3.addEdge(1, 4);
-    g3.addEdge(2, 4);
-    g3.addEdge(3, 4);
-    g3.addEdge(4, 5);
-    g3.addEdge(4, 1);
-    g3.print();
-
-    cout << endl;
-    cout << "path1 é caminho? " << g3.isValidPath(path1, 4, p1cycle) << " Com ciclo? " << p1cycle << endl;
-    cout << "path2 é caminho? " << g3.isValidPath(path2, 5, p2cycle) << " Com ciclo? " << p2cycle << endl;
-    cout << "path3 é caminho? " << g3.isValidPath(path3, 6, p3cycle) << " Com ciclo? " << p3cycle << endl;
-
     GraphAdjList g4 = GraphAdjList(6);
     g4.addEdge(0, 1);
+    g4.addEdge(0, 2);
     g4.addEdge(1, 3);
+    g4.addEdge(1, 4);
     g4.addEdge(2, 4);
+    g4.addEdge(3, 4);
     g4.addEdge(4, 5);
     g4.addEdge(4, 1);
+    g4.print();
 
     cout << endl;
-    cout << "g4 é subgrafo? " << g3.isSubGraph(g4) << endl;
-    g4.addEdge(3, 5);
-    cout << "novo g4 é subgrafo? " << g3.isSubGraph(g4) << endl;
+    cout << "path1 é caminho? " << g4.isValidPath(path1, 4, p1cycle) << " Com ciclo? " << p1cycle << endl;
+    cout << "path2 é caminho? " << g4.isValidPath(path2, 5, p2cycle) << " Com ciclo? " << p2cycle << endl;
+    cout << "path3 é caminho? " << g4.isValidPath(path3, 6, p3cycle) << " Com ciclo? " << p3cycle << endl;
+
+    GraphAdjList g5 = GraphAdjList(6);
+    g5.addEdge(0, 1);
+    g5.addEdge(1, 3);
+    g5.addEdge(2, 4);
+    g5.addEdge(4, 5);
+    g5.addEdge(4, 1);
 
     cout << endl;
-    cout << "tem caminho de 0 a 5? " << g3.hasPath(0, 5) << endl;
-    cout << "tem caminho de 5 a 2? " << g3.hasPath(5, 2) << endl;
-    cout << "tem caminho de 1 a 4? " << g3.hasPath(1, 4) << endl;
+    cout << "g5 é subgrafo? " << g4.isSubGraph(g5) << endl;
+    g5.addEdge(3, 5);
+    cout << "novo g5 é subgrafo? " << g4.isSubGraph(g5) << endl;
+
+    cout << endl;
+    cout << "tem caminho de 0 a 5? " << g4.hasPath(0, 5) << endl;
+    cout << "tem caminho de 5 a 2? " << g4.hasPath(5, 2) << endl;
+    cout << "tem caminho de 1 a 4? " << g4.hasPath(1, 4) << endl;
     for(int i = 0; i < 6; i++){hasPathTo[i] = false;}
-    g3.findConnected(1, hasPathTo);
+    g4.findConnected(1, hasPathTo);
     printList(hasPathTo, 6);
 
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "É topológico? " << g4.isTopological() << endl;
+    cout << "Tem ordenação topológica? " << g4.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+    g4.removeEdge(4, 1);
+    cout << "Agora é topológico? " << g4.isTopological() << endl;
+
+    GraphMatrix g6 = GraphMatrix(6);
+    g6.addEdge(5, 0);
+    g6.addEdge(5, 3);
+    g6.addEdge(5, 4);
+    g6.addEdge(4, 2);
+    g6.addEdge(3, 0);
+    g6.addEdge(3, 1);
+    g6.addEdge(2, 0);
+    g6.addEdge(2, 1);
+
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "g6 tem ordenação topológica? " << g6.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+
     cout << endl << "DFS: ";
-    g3.dfs(preOrder);
+    g4.dfs(preOrder, postOrder, parents);
+    cout << endl << "Pré ordem: ";
     printList(preOrder, 6);
+    cout << "Pós ordem: ";
+    printList(postOrder, 6);
+    cout << "Hierarquia: ";
+    printList(parents, 6);
 
-    cout << endl << "É topológico? " << g3.isTopological() << endl;
-    g3.removeEdge(4, 1);
-    cout << "Agora é topológico? " << g3.isTopological() << endl;
 
-    g3.removeEdge(0, 1);
-    g3.removeEdge(0, 2);
-    g3.removeEdge(1, 3);
-    g3.removeEdge(1, 4);
-    g3.removeEdge(2, 4);
-    g3.removeEdge(3, 4);
-    g3.removeEdge(4, 5);
-    g3.removeEdge(4, 1);
-    g3.removeEdge(4, 5);
-    g3.removeEdge(4, 1);
-    g3.print();
+    g4.removeEdge(0, 1);
+    g4.removeEdge(0, 2);
+    g4.removeEdge(1, 3);
+    g4.removeEdge(1, 4);
+    g4.removeEdge(2, 4);
+    g4.removeEdge(3, 4);
+    g4.removeEdge(4, 5);
+    g4.removeEdge(4, 1);
+    g4.removeEdge(4, 5);
+    g4.removeEdge(4, 1);
+    g4.print();
+
+
 }
