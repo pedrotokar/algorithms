@@ -6,6 +6,7 @@ typedef int vertex;
 struct EdgeNode {
     vertex vert;
     EdgeNode* next;
+    int weight;
 };
 
 
@@ -22,7 +23,7 @@ public:
     int** edges();
 
     bool hasEdge(vertex, vertex); //theta(1) - constant, only acess value in array
-    void addEdge(vertex, vertex); //theta(1)
+    void addEdge(vertex, vertex, int); //theta(1)
     void removeEdge(vertex, vertex); //theta(1)
 
     void print(); //theta(V^2)
@@ -30,6 +31,8 @@ public:
 
     bool isSubGraph(GraphMatrix&); //theta(V^2)
     bool isValidPath(vertex[], int, bool&); //theta(n)
+
+    //Graph search algorithms
 
     bool hasPath(vertex, vertex); //theta(V^2) - envelops below function
     void findConnected(vertex, bool[]); //theta(V^2)
@@ -60,6 +63,8 @@ public:
 
     bool isSubGraph(GraphAdjList&); //O(E + E')
     bool isValidPath(vertex[], int, bool&); //O(n * V)
+
+    //Graph search algorithms
 
     bool hasPath(vertex, vertex); //O(V + E) - envelops below function
     void findConnected(vertex, bool[]); //O(V + E)
