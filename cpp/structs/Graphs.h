@@ -56,7 +56,7 @@ public:
     EdgeNode** edges();
 
     bool hasEdge(vertex, vertex); //O(V)
-    void addEdge(vertex, vertex); //O(V)
+    void addEdge(vertex, vertex, int); //O(V)
     void removeEdge(vertex, vertex); //O(V)
 
     void print(); //O(V + E)

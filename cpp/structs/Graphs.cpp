@@ -274,7 +274,7 @@ int main(){
     bool p3cycle = false;
 
     GraphMatrix g1 = GraphMatrix(6);
-    g1.addEdge(0, 1);
+    g1.addEdge(0, 1, 99);
     g1.addEdge(0, 2);
     g1.addEdge(1, 3);
     g1.addEdge(1, 4);
