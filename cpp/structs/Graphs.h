@@ -13,7 +13,7 @@ struct EdgeNode {
 //Space complexity to store the graph: theta(len(V)^2)
 class GraphMatrix {
 private:
-    int m_numVertices; //Immutable
+    int m_numVertex; //Immutable
     int m_numEdges; //Edges count will be track to easen life in some parts
     int** m_edges; //Two references because it's a matrix
 
@@ -36,17 +36,20 @@ public:
 
     bool hasPath(vertex, vertex); //theta(V^2) - envelops below function
     void findConnected(vertex, bool[]); //theta(V^2)
-    void dfs(int[], int[], int[]);
+    void dfs(int[], int[], int[]); //theta(V^2) - same idea of the above algorithms, but now saving lots of information
     void dfsRecursive(vertex, int[], int&, int[], int&, int[]);
 
     bool isTopological(); //theta(V^2)
     bool hasTopologicalOrder(int[]); //theta(V^2)
+
+    void bfsForest(int[]); //theta(V^2)
+    void bfsTree(vertex, int[], int[]); //O(V^2)
 };
 
 
 class GraphAdjList {
 private:
-    int m_numVertices; //Immutable
+    int m_numVertex; //Immutable
     int m_numEdges; //Edges count will be track to easen life in some parts
     EdgeNode** m_edges; //Two references because it's a list of nodes
 
@@ -68,11 +71,14 @@ public:
 
     bool hasPath(vertex, vertex); //O(V + E) - envelops below function
     void findConnected(vertex, bool[]); //O(V + E)
-    void dfs(int[], int[], int[]);
-    void dfsRecursive(vertex, int[], int&, int[], int&, int[]);
+    void dfs(int[], int[], int[]); //O(V + E) - same idea of the above algorithms, but now saving lots of information
+    void dfsRecursive(vertex, int[], int&, int[], int&, int[]); //O(V + E)
 
     bool isTopological(); //theta(V + E)
     bool hasTopologicalOrder(int[]); //theta(V + E)
+
+    void bfsForest(int[]); //theta(V + E)
+    void bfsTree(vertex, int[], int[]); //O(V + E)
 };
 
 #endif

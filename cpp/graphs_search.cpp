@@ -5,10 +5,10 @@
 using namespace std;
 
 
-//theta(V^2)
+//theta(V^2) - it may seems like it's more complex, but since we have the hasPath array, we can ensure that each vertex is visited only once.
 void GraphMatrix::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex that can be reached starting from v1
     hasPath[v1] = true;
-    for (vertex v2 = 0; v2 < m_numVertices; v2++){
+    for (vertex v2 = 0; v2 < m_numVertex; v2++){
         if(hasEdge(v1, v2) && !hasPath[v2]){ //O(V)
             findConnected(v2, hasPath); //calls this exactly one time per vertex
         }
@@ -17,8 +17,8 @@ void GraphMatrix::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex
 
 //theta(V^2) - Just envelops above function to get the result from one specific vertex
 bool GraphMatrix::hasPath(vertex v1, vertex v2){
-    bool visited[m_numVertices];
-    for (vertex v = 0; v < m_numVertices; v++){
+    bool visited[m_numVertex];
+    for (vertex v = 0; v < m_numVertex; v++){
         visited[v] = false;
     }
     findConnected(v1, visited);
@@ -29,7 +29,7 @@ bool GraphMatrix::hasPath(vertex v1, vertex v2){
 
 void GraphMatrix::dfsRecursive(vertex v1, int preOrder[], int& preCount, int postOrder[], int& postCount, int parents[]){
     preOrder[v1] = preCount++;
-    for (vertex v2 = 0; v2 < m_numVertices; v2++){
+    for (vertex v2 = 0; v2 < m_numVertex; v2++){
         if(hasEdge(v1, v2) && preOrder[v2] == -1){
             parents[v2] = v1;
             dfsRecursive(v2, preOrder, preCount, postOrder, postCount, parents);
@@ -42,12 +42,12 @@ void GraphMatrix::dfsRecursive(vertex v1, int preOrder[], int& preCount, int pos
 void GraphMatrix::dfs(int preOrder[], int postOrder[], int parents[]){
     int preCount = 0;
     int postCount = 0;
-    for (vertex v = 0; v < m_numVertices; v++){
+    for (vertex v = 0; v < m_numVertex; v++){
         preOrder[v] = -1;
         postOrder[v] = -1;
         parents[v] = -1;
     }
-    for (vertex v = 0; v < m_numVertices; v++){
+    for (vertex v = 0; v < m_numVertex; v++){
         int depth = 0;
         if(preOrder[v] == -1){
             parents[v] = v;
@@ -58,7 +58,7 @@ void GraphMatrix::dfs(int preOrder[], int postOrder[], int parents[]){
 
 //O(V^2)
 bool GraphMatrix::isTopological(){
-    for(vertex i = 0; i < m_numVertices; i++){
+    for(vertex i = 0; i < m_numVertex; i++){
         for(vertex j = 0; j < i; j++){
             if(hasEdge(i, j)){
                 return false;
@@ -70,17 +70,17 @@ bool GraphMatrix::isTopological(){
 
 //O(V^2)
 bool GraphMatrix::hasTopologicalOrder(vertex ordering[]){
-    int inDegree[m_numVertices]; //Number of edges "entering" each vertex
-    for(vertex i = 0; i < m_numVertices; i++) {inDegree[i] = 0;}
-    for(vertex i = 0; i < m_numVertices; i++) {                 //O(V^2)
-        for(vertex j = 0; j < m_numVertices; j++) {
+    int inDegree[m_numVertex]; //Number of edges "entering" each vertex
+    for(vertex i = 0; i < m_numVertex; i++) {inDegree[i] = 0;}
+    for(vertex i = 0; i < m_numVertex; i++) {                 //O(V^2)
+        for(vertex j = 0; j < m_numVertex; j++) {
             if(hasEdge(i, j)) inDegree[j]++;
         }
     }
-    vertex queue[m_numVertices]; //Queue to list vertex we should visit, in order
-    int queueStart= 0;
+    vertex queue[m_numVertex]; //Queue to list vertex we should visit, in order
+    int queueStart = 0;
     int queueEnd = 0;
-    for(vertex i = 0; i < m_numVertices; i++) { //adds to queue all vertex that has no incoming edges (sources)
+    for(vertex i = 0; i < m_numVertex; i++) { //adds to queue all vertex that has no incoming edges (sources)
         if(inDegree[i] == 0){
             queue[queueEnd] = i;
             queueEnd++;
@@ -92,7 +92,7 @@ bool GraphMatrix::hasTopologicalOrder(vertex ordering[]){
         queueStart++;
         ordering[current] = counter; //Assigns a topological position to that vertex
         counter++;
-        for(vertex next = 0; next < m_numVertices; next++){ //for each vertex that met the conditions of having no entering edges, "removes" the edges that comes from this vertex, having the same effect as erasing the vertex. If a vertex begins to have entering degree 0 after that, adds to the queue
+        for(vertex next = 0; next < m_numVertex; next++){ //for each vertex that met the conditions of having no entering edges, "removes" the edges that comes from this vertex, having the same effect as erasing the vertex. If a vertex begins to have entering degree 0 after that, adds to the queue
             if(hasEdge(current, next)){
                 inDegree[next]--;
                 if(inDegree[next] == 0){
@@ -102,7 +102,58 @@ bool GraphMatrix::hasTopologicalOrder(vertex ordering[]){
             }
         }
     }
-    return counter >= m_numVertices; //if it's smaller, means we havent visited all the vertex
+    return counter >= m_numVertex; //if it's smaller, means we havent visited all the vertex
+}
+
+
+//theta(V^2) - every vertex gets queued once, and for each vertex we run in all of its edges (which equals to running in all vertexes)
+void GraphMatrix::bfsForest(int order[]){
+    for(vertex v = 0; v < m_numVertex; v++){order[v] = -1;}
+    int counter = 0;
+    for(vertex v = 0; v < m_numVertex; v++){ //already found
+        if(order[v] != -1){
+            continue;
+        }
+        vertex queue[m_numVertex];
+        int queueStart = 0;
+        int queueEnd = 0;
+        queue[queueEnd++] = v;
+        order[v] = counter++;
+        while(queueEnd > queueStart){
+            vertex current = queue[queueStart++];
+            for(vertex next = 0; next < m_numVertex; next++){
+                if (hasEdge(current, next) && order[next] == -1){
+                    order[next] = counter++;
+                    queue[queueEnd++] = next;
+                }
+            }
+        }
+    }
+}
+
+//O(V^2) - not all the vertex gets queued, and for each queued vertex we run in all of its edges (which equals to running in all vertexes)
+//The difference between the forest and this is that this one finds a tree associated with the inputed vertex
+void GraphMatrix::bfsTree(vertex v0, int order[], int parents[]){
+    for(vertex v = 0; v < m_numVertex; v++){order[v] = -1; parents[v] = -1;}
+
+    int counter = 0;
+    vertex queue[m_numVertex];
+    int queueStart = 0;
+    int queueEnd = 0;
+    queue[queueEnd++] = v0;
+    order[v0] = counter++;
+    parents[v0] = v0;
+
+    while(queueEnd > queueStart){
+        vertex current = queue[queueStart++];
+        for(vertex next = 0; next < m_numVertex; next++){
+            if (hasEdge(current, next) && order[next] == -1){
+                order[next] = counter++;
+                parents[next] = current;
+                queue[queueEnd++] = next;
+            }
+        }
+    }
 }
 
 
@@ -110,7 +161,7 @@ bool GraphMatrix::hasTopologicalOrder(vertex ordering[]){
 
 
 
-//O(V + E)
+//O(V + E) -
 void GraphAdjList::findConnected(vertex v1, bool hasPath[]){ //finds EVERY vertex that can be reached starting from v1
     hasPath[v1] = true;
     EdgeNode* node = m_edges[v1];
@@ -124,8 +175,8 @@ void GraphAdjList::findConnected(vertex v1, bool hasPath[]){ //finds EVERY verte
 
 //O(V + E) envelops above function
 bool GraphAdjList::hasPath(vertex v1, vertex v2){
-    bool visited[m_numVertices];
-    for (vertex v = 0; v < m_numVertices; v++){
+    bool visited[m_numVertex];
+    for (vertex v = 0; v < m_numVertex; v++){
         visited[v] = false;
     }
     findConnected(v1, visited);
@@ -150,12 +201,12 @@ void GraphAdjList::dfsRecursive(vertex v1, int preOrder[], int& preCount, int po
 void GraphAdjList::dfs(int preOrder[], int postOrder[], int parents[]){
     int preCount = 0;
     int postCount = 0;
-    for (vertex v = 0; v < m_numVertices; v++){
+    for (vertex v = 0; v < m_numVertex; v++){
         preOrder[v] = -1;
         postOrder[v] = -1;
         parents[v] = -1;
     }
-    for (vertex v = 0; v < m_numVertices; v++){
+    for (vertex v = 0; v < m_numVertex; v++){
         if(preOrder[v] == -1){
             parents[v] = v;
             dfsRecursive(v, preOrder, preCount, postOrder, postCount, parents);
@@ -166,7 +217,7 @@ void GraphAdjList::dfs(int preOrder[], int postOrder[], int parents[]){
 
 //O(V^2)
 bool GraphAdjList::isTopological(){ //If the list is always ordered, complexity can be lower
-    for (vertex i = 0; i <m_numVertices; i++){
+    for (vertex i = 0; i <m_numVertex; i++){
         EdgeNode* node = m_edges[i];
         while(node){
             if(i >= node->vert){
@@ -181,19 +232,19 @@ bool GraphAdjList::isTopological(){ //If the list is always ordered, complexity 
 
 //O(V + E)
 bool GraphAdjList::hasTopologicalOrder(vertex ordering[]){
-    int inDegree[m_numVertices]; //Number of edges "entering" each vertex
-    for(vertex i = 0; i < m_numVertices; i++) {inDegree[i] = 0;}
-    for(vertex i = 0; i < m_numVertices; i++) {                 //O(V + E)
+    int inDegree[m_numVertex]; //Number of edges "entering" each vertex
+    for(vertex i = 0; i < m_numVertex; i++) {inDegree[i] = 0;}
+    for(vertex i = 0; i < m_numVertex; i++) {                 //O(V + E)
         EdgeNode* node = m_edges[i];
         while(node) {
             inDegree[node->vert]++;
             node = node->next;
         }
     }
-    vertex queue[m_numVertices]; //Queue to list vertex we should visit, in order
-    int queueStart= 0;
+    vertex queue[m_numVertex]; //Queue to list vertex we should visit, in order
+    int queueStart = 0;
     int queueEnd = 0;
-    for(vertex i = 0; i < m_numVertices; i++) { //adds to queue all vertex that has no incoming edges (sources)
+    for(vertex i = 0; i < m_numVertex; i++) { //adds to queue all vertex that has no incoming edges (sources)
         if(inDegree[i] == 0){
             queue[queueEnd] = i;
             queueEnd++;
@@ -215,5 +266,59 @@ bool GraphAdjList::hasTopologicalOrder(vertex ordering[]){
             node = node->next;
         }
     }
-    return counter >= m_numVertices; //if it's smaller, means we havent visited all the vertex
+    return counter >= m_numVertex; //if it's smaller, means we havent visited all the vertex
+}
+
+//theta(V + E) - every vertex gets queued once, and for each vertex we run in all of its edges
+void GraphAdjList::bfsForest(int order[]){
+    for(vertex v = 0; v < m_numVertex; v++){order[v] = -1;}
+    int counter = 0;
+    for(vertex v = 0; v < m_numVertex; v++){ //already found
+        if(order[v] != -1){
+            continue;
+        }
+        vertex queue[m_numVertex];
+        int queueStart = 0;
+        int queueEnd = 0;
+        queue[queueEnd++] = v;
+        order[v] = counter++;
+        while(queueEnd > queueStart){
+            vertex current = queue[queueStart++];
+            EdgeNode* node = m_edges[current];
+            while(node){
+                if (order[node->vert] == -1){
+                    order[node->vert] = counter++;
+                    queue[queueEnd++] = node->vert;
+                }
+                node = node->next;
+            }
+        }
+    }
+}
+
+//O(V + E) - not all the vertex gets queued, and for each queued vertex we run in all of its edges
+//The difference between the forest and this is that this one finds a tree associated with the inputed vertex
+void GraphAdjList::bfsTree(vertex v0, int order[], int parents[]){
+    for(vertex v = 0; v < m_numVertex; v++){order[v] = -1; parents[v] = -1;}
+
+    int counter = 0;
+    vertex queue[m_numVertex];
+    int queueStart = 0;
+    int queueEnd = 0;
+    queue[queueEnd++] = v0;
+    order[v0] = counter++;
+    parents[v0] = v0;
+
+    while(queueEnd > queueStart){
+        vertex current = queue[queueStart++];
+        EdgeNode* node = m_edges[current];
+        while(node){
+            if (order[node->vert] == -1){
+                order[node->vert] = counter++;
+                parents[node->vert] = current;
+                queue[queueEnd++] = node->vert;
+            }
+            node = node->next;
+        }
+    }
 }

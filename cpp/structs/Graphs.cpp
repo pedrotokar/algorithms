@@ -6,18 +6,18 @@ using namespace std;
 
 //Space complexity to store the graph: theta(len(V)^2)
 GraphMatrix::GraphMatrix(int numVertices):
-m_numVertices(numVertices), m_numEdges(0), m_edges(nullptr){ //Already initializes the graph attributes
+m_numVertex(numVertices), m_numEdges(0), m_edges(nullptr){ //Already initializes the graph attributes
     m_edges = new int*[numVertices]; //new array of arrays of ints
-    for (vertex i = 0; i < m_numVertices; i++){
+    for (vertex i = 0; i < m_numVertex; i++){
         m_edges[i] = new int[numVertices];
-        for (vertex j = 0; j <m_numVertices; j++){
+        for (vertex j = 0; j <m_numVertex; j++){
             m_edges[i][j] = 0; //fill everything with zeros
         }
     }
 }
 
 GraphMatrix::~GraphMatrix(){
-    for (vertex i = 0; i < m_numVertices; i++){
+    for (vertex i = 0; i < m_numVertex; i++){
         delete[] m_edges[i];
     }
     delete[] m_edges;
@@ -27,7 +27,7 @@ int** GraphMatrix::edges() {return m_edges;}
 
 //theta(1) - constant, only acess value in array
 bool GraphMatrix::hasEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
         if(m_edges[v1][v2] != 0){
             return true;
         }
@@ -37,7 +37,7 @@ bool GraphMatrix::hasEdge(vertex v1, vertex v2){
 
 //theta(1)
 void GraphMatrix::addEdge(vertex v1, vertex v2, int weight = 1){
-    if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices && weight != 0){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex && weight != 0){
         if (!hasEdge(v1, v2)){
             m_numEdges++;
             m_edges[v1][v2] = weight;
@@ -47,7 +47,7 @@ void GraphMatrix::addEdge(vertex v1, vertex v2, int weight = 1){
 
 //theta(1)
 void GraphMatrix::removeEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
         if (hasEdge(v1, v2)){
             m_numEdges--;
             m_edges[v1][v2] = 0;
@@ -58,8 +58,8 @@ void GraphMatrix::removeEdge(vertex v1, vertex v2){
 //theta(V^2)
 void GraphMatrix::print(){
     cout << m_numEdges << " [ ";
-    for (vertex i = 0; i < m_numVertices; i++){
-        for (vertex j = 0; j <m_numVertices; j++){
+    for (vertex i = 0; i < m_numVertex; i++){
+        for (vertex j = 0; j <m_numVertex; j++){
             if (hasEdge(i, j)){
                 cout << "(" << i << " " << j << " - " << m_edges[i][j] << ") ";
             }
@@ -71,8 +71,8 @@ void GraphMatrix::print(){
 
 //theta(V^2)
 void GraphMatrix::printMatrix(){
-    for (vertex i = 0; i < m_numVertices; i++){
-        for (vertex j = 0; j <m_numVertices; j++){
+    for (vertex i = 0; i < m_numVertex; i++){
+        for (vertex j = 0; j <m_numVertex; j++){
             cout << m_edges[i][j] << " ";
         }
         cout << endl;
@@ -82,8 +82,8 @@ void GraphMatrix::printMatrix(){
 //theta(V^2)
 bool GraphMatrix::isSubGraph(GraphMatrix& H) {
     int** hEdges = H.edges();
-    for (vertex i = 0; i < m_numVertices; i++){
-        for (vertex j = 0; j <m_numVertices; j++){
+    for (vertex i = 0; i < m_numVertex; i++){
+        for (vertex j = 0; j <m_numVertex; j++){
             if(hEdges[i][j] > 0){
                 if(!hasEdge(i, j)){
                     return false;
@@ -97,8 +97,8 @@ bool GraphMatrix::isSubGraph(GraphMatrix& H) {
 //theta(n)
 bool GraphMatrix::isValidPath(vertex path[], int iLength, bool& hasCycle){
     if (iLength < 2) return false;
-    bool visited[m_numVertices];
-    for (vertex i = 0; i <m_numVertices; i++) {visited[i] = false;}
+    bool visited[m_numVertex];
+    for (vertex i = 0; i <m_numVertex; i++) {visited[i] = false;}
     visited[path[0]] = true;
     for(int i = 1; i < iLength; i++){
         if(visited[path[i]]) hasCycle = true;
@@ -113,7 +113,7 @@ bool GraphMatrix::isValidPath(vertex path[], int iLength, bool& hasCycle){
 //Implements everything but now for adjacency list graphs-------------------------------------------------------
 
 GraphAdjList::GraphAdjList(int numVertices):
-m_numVertices(numVertices), m_numEdges(0), m_edges(nullptr){
+m_numVertex(numVertices), m_numEdges(0), m_edges(nullptr){
     m_edges = new EdgeNode*[numVertices]; //Initializes the list of edges for each vetex
     for (vertex i = 0; i < numVertices; i++) {
         m_edges[i] = nullptr; //No edges exist yet
@@ -121,7 +121,7 @@ m_numVertices(numVertices), m_numEdges(0), m_edges(nullptr){
 }
 
 GraphAdjList::~GraphAdjList(){
-    for (vertex i = 0; i < m_numVertices; i++){
+    for (vertex i = 0; i < m_numVertex; i++){
         EdgeNode* node = m_edges[i]; //Get the list head of edges for that vertex
         while (node != nullptr) { //And goes deleting everything
             EdgeNode* nextNode = node->next;
@@ -148,7 +148,7 @@ bool GraphAdjList::hasEdge(vertex v1, vertex v2){
 
 //O(V) because in worst case it adds on the end of the list
 void GraphAdjList::addEdge(vertex v1, vertex v2, int weight = 1){
-    if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices && weight != 0){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex && weight != 0){
         EdgeNode* node = m_edges[v1]; //Get the list head of edges for that vertex
         if(node == nullptr || node->vert >= v2){
             m_edges[v1] = new EdgeNode;
@@ -181,7 +181,7 @@ void GraphAdjList::addEdge(vertex v1, vertex v2, int weight = 1){
 
 //O(V) because in worst case it goes trought every edge in a vertex
 void GraphAdjList::removeEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 <m_numVertices){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
         EdgeNode* node = m_edges[v1];
         if(node == nullptr) return;
         else if(node->vert == v2){
@@ -206,7 +206,7 @@ void GraphAdjList::removeEdge(vertex v1, vertex v2){
 //O(V + E)
 void GraphAdjList::print(){
     cout << m_numEdges << " [ ";
-    for (vertex i = 0; i < m_numVertices; i++){
+    for (vertex i = 0; i < m_numVertex; i++){
         EdgeNode* node = m_edges[i]; //Get the list head of edges for that vertex
         while (node != nullptr) { //And goes printing everything
             cout << "(" << i << " " << node->vert << " 1) ";
@@ -219,7 +219,7 @@ void GraphAdjList::print(){
 //O(E + E') bacause it passes through each edge of the two graphs
 bool GraphAdjList::isSubGraph(GraphAdjList& H) {
     EdgeNode** hEdges = H.edges();
-    for (vertex i = 0; i < m_numVertices; i++){
+    for (vertex i = 0; i < m_numVertex; i++){
         EdgeNode* hEdge = hEdges[i];
         EdgeNode* gEdge = m_edges[i];
         while (hEdge) {
@@ -241,14 +241,14 @@ bool GraphAdjList::isSubGraph(GraphAdjList& H) {
 //O(n * V) because it checks, for each step in the path, if an edge exists. Checking the existence of an edge can take len(V)
 bool GraphAdjList::isValidPath(vertex path[], int iLength, bool& hasCycle){
     if (iLength < 2) return false;
-    bool visited[m_numVertices];
-    for(vertex i = 0; i <m_numVertices; i++) {visited[i] = false;}
+    bool visited[m_numVertex];
+    for(vertex i = 0; i <m_numVertex; i++) {visited[i] = false;}
     visited[path[0]] = true;
 
     for(int i = 1; i < iLength; i++){
         if (visited[path[i]]) hasCycle = true;
 
-        EdgeNode* node = m_edges[path[i-1]];
+        EdgeNode* node = m_edges[path[i-1]]; //this part might have been implemented with just a call to hasEdge
         bool exists = false;
         while(node){
             if(node->vert == path[i]){
@@ -333,6 +333,8 @@ int main(){
     cout << endl << "g3 tem ordenação topológica? " << g3.hasTopologicalOrder(topologicalOrdering) << endl;
     printList(topologicalOrdering, 6);
 
+    g1.addEdge(4, 1);
+
     cout << endl << "DFS: ";
     int preOrder[6];
     int postOrder[6];
@@ -345,6 +347,19 @@ int main(){
     cout << "Hierarquia: ";
     printList(parents, 6);
 
+    cout << endl << "BFS: ";
+    int bfsOrder[6];
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0;}
+    g1.bfsForest(bfsOrder);
+    cout << endl << "Ordem BFS (completo)";
+    printList(bfsOrder, 6);
+
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0; parents[i] = 0;}
+    g1.bfsTree(2, bfsOrder, parents);
+    cout << endl << "Ordem BFS (árvore)";
+    printList(bfsOrder, 6);
+    cout << "hierarquia";
+    printList(parents, 6);
 
     g1.removeEdge(0, 1);
     g1.removeEdge(0, 2);
@@ -425,6 +440,8 @@ int main(){
     cout << endl << "g6 tem ordenação topológica? " << g6.hasTopologicalOrder(topologicalOrdering) << endl;
     printList(topologicalOrdering, 6);
 
+    g4.addEdge(4, 1);
+
     cout << endl << "DFS: ";
     g4.dfs(preOrder, postOrder, parents);
     cout << endl << "Pré ordem: ";
@@ -434,6 +451,18 @@ int main(){
     cout << "Hierarquia: ";
     printList(parents, 6);
 
+    cout << endl << "BFS: ";
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0;}
+    g4.bfsForest(bfsOrder);
+    cout << endl << "Ordem BFS (completo)";
+    printList(bfsOrder, 6);
+
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0; parents[i] = 0;}
+    g4.bfsTree(2, bfsOrder, parents);
+    cout << endl << "Ordem BFS (árvore)";
+    printList(bfsOrder, 6);
+    cout << "hierarquia";
+    printList(parents, 6);
 
     g4.removeEdge(0, 1);
     g4.removeEdge(0, 2);
