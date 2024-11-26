@@ -108,9 +108,6 @@ void maxHeapify(int heap[], int iIndex, int iLength, T values[]){
     }
 }
 
-//Average case complexity: O(logn) - Same as above just change comparisons
-//Worst case complexity: O(logn)
-//Best case complexity: O(1)
 template <typename T>
 void minHeapify(int heap[], int iIndex, int iLength, T values[]){
     int i = iIndex;
@@ -129,32 +126,29 @@ void minHeapify(int heap[], int iIndex, int iLength, T values[]){
 }
 
 template <typename T>
-void maxHeapifyBottom(int heap[], int iLength, int iIndex, T values[]) {
+void maxHeapifyBottom(int heap[], int iIndex, int iLength, T values[]) {
     int iParent = (iIndex - 1) / 2;
     if (iParent >= 0) { //If negative means it's the top of the heap
         if (values[heap[iIndex]] > values[heap[iParent]]) {
             swap(heap, iIndex, iParent);
             // Recursively heapify the parent node
-            maxHeapifyBottom(heap, iLength, iParent, values);
+            maxHeapifyBottom(heap, iParent, iLength, values);
         }
     }
 }
 
 template <typename T>
-void minHeapifyBottom(int heap[], int iLength, int iIndex, T values[]) {
+void minHeapifyBottom(int heap[], int iIndex, int iLength, T values[]) {
     int iParent = (iIndex - 1) / 2;
     if (iParent >= 0 != iParent != iIndex) { //If negative means it's the top of the heap
         if (values[heap[iIndex]] < values[heap[iParent]]) {
             swap(heap, iIndex, iParent);
             // Recursively heapify the parent node
-            minHeapifyBottom(heap, iLength, iParent, values);
+            minHeapifyBottom(heap, iParent, iLength, values);
         }
     }
 }
 
-//Average case complexity: O(n) - doing the summation of the costs retrieve this result
-//Worst case complexity: O(n)
-//Best case complexity: O(n) - heap is already done - maxHeapify doesnt do nothing
 template <typename T>
 void buildMaxHeap(int heap[], int iLength, T values[]){
     for (int i = iLength/2 - 1; i >= 0; i--){
@@ -162,17 +156,12 @@ void buildMaxHeap(int heap[], int iLength, T values[]){
     }
 }
 
-//Average case complexity: O(n) - same as above just change heap type
-//Worst case complexity: O(n)
-//Best case complexity: O(n)
 template <typename T>
 void buildMinHeap(int heap[], int iLength, T values[]){
     for (int i = iLength/2 - 1; i >= 0; i--){
         minHeapify(heap, i, iLength, values);
     }
 }
-
-
 
 
 

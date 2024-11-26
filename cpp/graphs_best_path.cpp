@@ -89,7 +89,7 @@ void GraphAdjList::CPTDijkstra(vertex v0, vertex parents[], int distance[]){
                     distance[v2] = distance[v1] + node->weight;
                     parents[v2] = v1;
                     heap[heapEnd++] = v2;
-                    minHeapifyBottom(heap, heapEnd, heapEnd - 1, distance);
+                    minHeapifyBottom(heap, heapEnd - 1, heapEnd, distance);
                 }
             }
             node = node->next;
