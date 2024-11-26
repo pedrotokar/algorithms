@@ -486,6 +486,19 @@ int main(){
     cout << "hierarquia";
     printList(parents, 6);
 
+    for(int i = 0; i < 6; i++){distances[i] = 0; parents[i] = 0;}
+    g4.SPT(0, parents, distances);
+    cout << endl << "Menores distâncias partindo de 0 em g4: ";
+    printList(distances, 6);
+    cout << "SPT: ";
+    printList(parents, 6)
+
+    for(int i = 0; i < 6; i++){distances[i] = 0; parents[i] = 0;}
+    g4.SPT(4, parents, distances);
+    cout << "Menores distâncias partindo de 4 em g4: ";
+    printList(distances, 6);
+    cout << "SPT: ";
+    printList(parents, 6)
 
 
     g4.removeEdge(0, 1);

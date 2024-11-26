@@ -27,7 +27,7 @@ bool GraphMatrix::hasPath(vertex v1, vertex v2){
 
 
 
-void GraphMatrix::dfsRecursive(vertex v1, int preOrder[], int& preCount, int postOrder[], int& postCount, int parents[]){
+void GraphMatrix::dfsRecursive(vertex v1, int preOrder[], int& preCount, int postOrder[], int& postCount, vertex parents[]){
     preOrder[v1] = preCount++;
     for (vertex v2 = 0; v2 < m_numVertex; v2++){
         if(hasEdge(v1, v2) && preOrder[v2] == -1){
@@ -39,7 +39,7 @@ void GraphMatrix::dfsRecursive(vertex v1, int preOrder[], int& preCount, int pos
 }
 
 //Returns preOrder, postOrder and radical forest of any graph
-void GraphMatrix::dfs(int preOrder[], int postOrder[], int parents[]){
+void GraphMatrix::dfs(int preOrder[], int postOrder[], vertex parents[]){
     int preCount = 0;
     int postCount = 0;
     for (vertex v = 0; v < m_numVertex; v++){
@@ -133,7 +133,7 @@ void GraphMatrix::bfsForest(int order[]){
 
 //O(V^2) - not all the vertex gets queued, and for each queued vertex we run in all of its edges (which equals to running in all vertexes)
 //The difference between the forest and this is that this one finds a tree associated with the inputed vertex
-void GraphMatrix::bfsTree(vertex v0, int order[], int parents[]){
+void GraphMatrix::bfsTree(vertex v0, int order[], vertex parents[]){
     for(vertex v = 0; v < m_numVertex; v++){order[v] = -1; parents[v] = -1;}
 
     int counter = 0;
@@ -185,7 +185,7 @@ bool GraphAdjList::hasPath(vertex v1, vertex v2){
 
 
 
-void GraphAdjList::dfsRecursive(vertex v1, int preOrder[], int& preCount, int postOrder[], int& postCount, int parents[]){
+void GraphAdjList::dfsRecursive(vertex v1, int preOrder[], int& preCount, int postOrder[], int& postCount, vertex parents[]){
     preOrder[v1] = preCount++;
     EdgeNode* node = m_edges[v1];
     while(node){
@@ -198,7 +198,7 @@ void GraphAdjList::dfsRecursive(vertex v1, int preOrder[], int& preCount, int po
     postOrder[v1] = postCount++;
 }
 
-void GraphAdjList::dfs(int preOrder[], int postOrder[], int parents[]){
+void GraphAdjList::dfs(int preOrder[], int postOrder[], vertex parents[]){
     int preCount = 0;
     int postCount = 0;
     for (vertex v = 0; v < m_numVertex; v++){
@@ -298,7 +298,7 @@ void GraphAdjList::bfsForest(int order[]){
 
 //O(V + E) - not all the vertex gets queued, and for each queued vertex we run in all of its edges
 //The difference between the forest and this is that this one finds a tree associated with the inputed vertex
-void GraphAdjList::bfsTree(vertex v0, int order[], int parents[]){
+void GraphAdjList::bfsTree(vertex v0, int order[], vertex parents[]){
     for(vertex v = 0; v < m_numVertex; v++){order[v] = -1; parents[v] = -1;}
 
     int counter = 0;

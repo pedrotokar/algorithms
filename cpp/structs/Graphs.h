@@ -36,16 +36,19 @@ public:
 
     bool hasPath(vertex, vertex); //theta(V^2) - envelops below function
     void findConnected(vertex, bool[]); //theta(V^2)
-    void dfs(int[], int[], int[]); //theta(V^2) - same idea of the above algorithms, but now saving lots of information
-    void dfsRecursive(vertex, int[], int&, int[], int&, int[]);
+    void dfs(int[], int[], vertex[]); //theta(V^2) - same idea of the above algorithms, but now saving lots of information
+    void dfsRecursive(vertex, int[], int&, int[], int&, vertex[]);
 
     bool isTopological(); //theta(V^2)
     bool hasTopologicalOrder(int[]); //theta(V^2)
 
     void bfsForest(int[]); //theta(V^2)
-    void bfsTree(vertex, int[], int[]); //O(V^2)
+    void bfsTree(vertex, int[], vertex[]); //O(V^2)
+
+    //Graph minimal path algorithms
 
     bool dagSPT(vertex[], int[]); //theta(V^2)
+    void SPT(vertex, vertex[], int[]); //O(V^2)
 };
 
 
@@ -73,16 +76,19 @@ public:
 
     bool hasPath(vertex, vertex); //O(V + E) - envelops below function
     void findConnected(vertex, bool[]); //O(V + E)
-    void dfs(int[], int[], int[]); //O(V + E) - same idea of the above algorithms, but now saving lots of information
-    void dfsRecursive(vertex, int[], int&, int[], int&, int[]); //O(V + E)
+    void dfs(int[], int[], vertex[]); //O(V + E) - same idea of the above algorithms, but now saving lots of information
+    void dfsRecursive(vertex, int[], int&, int[], int&, vertex[]); //O(V + E)
 
     bool isTopological(); //theta(V + E)
     bool hasTopologicalOrder(int[]); //theta(V + E)
 
     void bfsForest(int[]); //theta(V + E)
-    void bfsTree(vertex, int[], int[]); //O(V + E)
+    void bfsTree(vertex, int[], vertex[]); //O(V + E)
+
+    //Graph minimal path algorithms
 
     void dagSPT(vertex[], int[]); //theta(V + E)
+    void SPT(vertex, vertex[], int[]); //O(V + E)
 };
 
 #endif
