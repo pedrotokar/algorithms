@@ -425,8 +425,25 @@ int main(){
     printList(topologicalOrdering, 6);
     g4.removeEdge(4, 1);
     cout << "Agora é topológico? " << g4.isTopological() << endl;
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
 
-    GraphMatrix g6 = GraphMatrix(6);
+    int distances[6];
+    g4.dagSPT(parents, distances);
+    cout << endl << "Quais as menores distâncias possíveis para se chegar nos vértices, partindo do pai? ";
+    printList(distances, 6);
+    cout << "Qual a configuração da SPT? ";
+    printList(parents, 6);
+
+    g4.addEdge(4, 1);
+
+    cout << "g4 não é mais topológico";
+    g4.dagSPT(parents, distances);
+    cout << endl << "Quais as menores distâncias possíveis para se chegar nos vértices, partindo do pai? ";
+    printList(distances, 6);
+    cout << "Qual a configuração da SPT? ";
+    printList(parents, 6);
+
+    GraphAdjList g6 = GraphAdjList(6);
     g6.addEdge(5, 0);
     g6.addEdge(5, 3);
     g6.addEdge(5, 4);
@@ -440,7 +457,12 @@ int main(){
     cout << endl << "g6 tem ordenação topológica? " << g6.hasTopologicalOrder(topologicalOrdering) << endl;
     printList(topologicalOrdering, 6);
 
-    g4.addEdge(4, 1);
+    g6.dagSPT(parents, distances);
+    cout << endl << "Em g6, quais as menores distâncias possíveis para se chegar nos vértices, partindo do pai? ";
+    printList(distances, 6);
+    cout << "Em g6, qual a configuração da SPT? ";
+    printList(parents, 6);
+
 
     cout << endl << "DFS: ";
     g4.dfs(preOrder, postOrder, parents);
@@ -463,6 +485,8 @@ int main(){
     printList(bfsOrder, 6);
     cout << "hierarquia";
     printList(parents, 6);
+
+
 
     g4.removeEdge(0, 1);
     g4.removeEdge(0, 2);

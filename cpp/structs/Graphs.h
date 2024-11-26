@@ -44,6 +44,8 @@ public:
 
     void bfsForest(int[]); //theta(V^2)
     void bfsTree(vertex, int[], int[]); //O(V^2)
+
+    bool dagSPT(vertex[], int[]); //theta(V^2)
 };
 
 
@@ -79,6 +81,8 @@ public:
 
     void bfsForest(int[]); //theta(V + E)
     void bfsTree(vertex, int[], int[]); //O(V + E)
+
+    void dagSPT(vertex[], int[]); //theta(V + E)
 };
 
 #endif
