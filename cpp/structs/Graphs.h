@@ -89,6 +89,7 @@ public:
 
     void dagSPT(vertex[], int[]); //theta(V + E)
     void SPT(vertex, vertex[], int[]); //O(V + E)
+    void CPTDijkstra(vertex, vertex[], int[]); //O((V + E)log(V))
 };
 
 #endif

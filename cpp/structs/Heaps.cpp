@@ -4,6 +4,9 @@
 //(where currently it's the only place that heaps are used)
 
 #include "Heaps.h"
+#include  <iostream>
+
+using namespace std;
 
 template <typename T> void swap(T[], int, int);
 template <typename T> void maxHeapify(T[], int, int);
@@ -140,8 +143,8 @@ void maxHeapifyBottom(int heap[], int iLength, int iIndex, T values[]) {
 template <typename T>
 void minHeapifyBottom(int heap[], int iLength, int iIndex, T values[]) {
     int iParent = (iIndex - 1) / 2;
-    if (iParent >= 0) { //If negative means it's the top of the heap
-        if (values[heap[iIndex]] <= values[heap[iParent]]) {
+    if (iParent >= 0 != iParent != iIndex) { //If negative means it's the top of the heap
+        if (values[heap[iIndex]] < values[heap[iParent]]) {
             swap(heap, iIndex, iParent);
             // Recursively heapify the parent node
             minHeapifyBottom(heap, iLength, iParent, values);

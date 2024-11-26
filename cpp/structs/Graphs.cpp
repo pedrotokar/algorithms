@@ -495,7 +495,7 @@ int main(){
 
     for(int i = 0; i < 6; i++){distances[i] = 0; parents[i] = 0;}
     g4.SPT(4, parents, distances);
-    cout << "Menores distâncias partindo de 4 em g4: ";
+    cout << endl << "Menores distâncias partindo de 4 em g4: ";
     printList(distances, 6);
     cout << "SPT: ";
     printList(parents, 6)
@@ -513,5 +513,26 @@ int main(){
     g4.removeEdge(4, 1);
     g4.print();
 
+    //http://graphonline.top/en/?graph=EBRQQOMYwjhUngCi
+    GraphAdjList g7 = GraphAdjList(8);
+    g7.addEdge(7, 1, 7);
+    g7.addEdge(1, 2, 5);
+    g7.addEdge(1, 5, 14);
+    g7.addEdge(0, 4, 1);
+    g7.addEdge(1, 4, 6);
+    g7.addEdge(4, 1, 2);
+    g7.addEdge(2, 7, 11);
+    g7.addEdge(6, 5, 1);
+    g7.addEdge(5, 6, 6);
+    g7.addEdge(6, 0, 14);
+    g7.addEdge(3, 1, 14);
+    g7.addEdge(5, 1, 2);
 
+    vertex g7Parents[8];
+    int g7Distances[8];
+    g7.CPTDijkstra(3, g7Parents, g7Distances);
+    cout << "Menores distâncias partindo de 0 em g7: ";
+    printList(g7Distances, 8);
+    cout << "CPT: ";
+    printList(g7Parents, 8);
 }

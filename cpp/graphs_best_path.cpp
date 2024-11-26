@@ -1,5 +1,6 @@
 #include <iostream>
 #include "structs/Graphs.h"
+#include "structs/Heaps.h"
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
 using namespace std;
@@ -55,3 +56,44 @@ void GraphAdjList::SPT(vertex v0, vertex parents[], int distances[]){
     }
 }
 
+//O((V + E)log(V)) - does the habitual scan in all the vertices and edges, but additionaly keeps
+//a heap, which has O(lov(V)) insertion and remotion operations.
+void GraphAdjList::CPTDijkstra(vertex v0, vertex parents[], int distance[]){
+    const int INF = 2147483647;
+    bool visited[m_numVertex];
+    for(vertex v = 0; v < m_numVertex; v++){
+        parents[v] = -1;
+        distance[v] = INF;
+        visited[v] = false;
+    }
+
+    distance[v0] = 0;
+    parents[v0] = v0;
+
+    vertex heap[m_numVertex];
+    int heapEnd = 0;
+    heap[heapEnd++] = v0;
+
+    while(heapEnd != 0){
+        vertex v1 = heap[0]; //removing v1 from heap
+        heapEnd--;
+        swap(heap, 0, heapEnd);
+        minHeapify(heap, heapEnd, 0, distance);
+        if(distance[v1] == INF) break;
+
+        EdgeNode* node = m_edges[v1];
+        while(node){
+            vertex v2 = node->vert;
+            if(!visited[v2]){
+                if (distance[v1] + node->weight < distance[v2]){
+                    distance[v2] = distance[v1] + node->weight;
+                    parents[v2] = v1;
+                    heap[heapEnd++] = v2;
+                    minHeapifyBottom(heap, heapEnd, heapEnd - 1, distance);
+                }
+            }
+            node = node->next;
+        }
+        visited[v1] = true;
+    }
+}
