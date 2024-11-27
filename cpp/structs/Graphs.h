@@ -48,10 +48,10 @@ public:
 
     //Graph minimal path algorithms
 
-    bool dagSPT(vertex[], int[]); //theta(V^2)
+    void dagSPT(vertex[], int[]); //theta(V^2)
     void SPT(vertex, vertex[], int[]); //O(V^2)
     void CPTDijkstra(vertex, vertex[], int[]); //O((V^2)log(V))
-    bool CPTBellmanFord(vertex, vertex[], int[]);
+    bool CPTBellmanFord(vertex, vertex[], int[]); //theta(V^3)
 };
 
 
@@ -94,7 +94,7 @@ public:
     void dagSPT(vertex[], int[]); //theta(V + E)
     void SPT(vertex, vertex[], int[]); //O(V + E)
     void CPTDijkstra(vertex, vertex[], int[]); //O((V + E)log(V))
-    bool CPTBellmanFord(vertex, vertex[], int[]);
+    bool CPTBellmanFord(vertex, vertex[], int[]); //O(VE)
 };
 
 #endif
