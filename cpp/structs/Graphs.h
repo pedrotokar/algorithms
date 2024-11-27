@@ -18,7 +18,7 @@ private:
     int** m_edges; //Two references because it's a matrix
 
 public:
-    GraphMatrix(int numVertices);
+    GraphMatrix(int);
     ~GraphMatrix();
     int** edges();
 
@@ -66,7 +66,7 @@ private:
     EdgeNode** m_edges; //Two references because it's a list of nodes
 
 public:
-    GraphAdjList(int numVertices);
+    GraphAdjList(int);
     ~GraphAdjList();
     EdgeNode** edges();
 
@@ -103,6 +103,7 @@ public:
 
     void slowPrim(vertex[], vertex = 0); //O(V^3)
     void slowKruskal(vertex[], vertex[]);
+    void kruskal(vertex[], vertex[]);
 };
 
 #endif
