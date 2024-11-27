@@ -340,6 +340,7 @@ int main(){
     g3.addEdge(6, 0, 14);
     g3.addEdge(3, 1, 14);
     g3.addEdge(5, 1, 2);
+    g3.print();
 
     vertex g3Parents[8];
     int g3Distances[8];
@@ -372,6 +373,8 @@ int main(){
     g4.addEdge(6, 5, -3);
     g4.addEdge(2, 8, -2);
     g4.addEdge(4, 1, -1);
+
+    g4.print();
 
     vertex g4Parents[9];
     int g4Distances[9];
@@ -480,6 +483,9 @@ int main(){
     g7.addEdge(3, 1, 14);
     g7.addEdge(5, 1, 2);
 
+
+    g7.print();
+
     vertex g7Parents[8];
     int g7Distances[8];
     g7.CPTDijkstra(0, g7Parents, g7Distances);
@@ -511,6 +517,8 @@ int main(){
     g8.addEdge(6, 5, -3);
     g8.addEdge(2, 8, -2);
     g8.addEdge(4, 1, -1);
+
+    g8.print();
 
     vertex g8Parents[9];
     int g8Distances[9];

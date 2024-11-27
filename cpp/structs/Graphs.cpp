@@ -27,7 +27,7 @@ int** GraphMatrix::edges() {return m_edges;}
 
 //theta(1) - constant, only acess value in array
 bool GraphMatrix::hasEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 < m_numVertex){
         if(m_edges[v1][v2] != 0){
             return true;
         }
@@ -36,19 +36,8 @@ bool GraphMatrix::hasEdge(vertex v1, vertex v2){
 }
 
 //theta(1)
-void GraphMatrix::addEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
-        if (!hasEdge(v1, v2)){
-            m_numEdges++;
-            m_edges[v1][v2] = 1;
-        }
-    }
-}
-
-
-//theta(1)
 void GraphMatrix::addEdge(vertex v1, vertex v2, int weight){
-    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex && weight != 0){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 < m_numVertex && weight != 0){
         if (!hasEdge(v1, v2)){
             m_numEdges++;
             m_edges[v1][v2] = weight;
@@ -58,7 +47,7 @@ void GraphMatrix::addEdge(vertex v1, vertex v2, int weight){
 
 //theta(1)
 void GraphMatrix::removeEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
+    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 < m_numVertex){
         if (hasEdge(v1, v2)){
             m_numEdges--;
             m_edges[v1][v2] = 0;
@@ -72,7 +61,7 @@ void GraphMatrix::print(){
     for (vertex i = 0; i < m_numVertex; i++){
         for (vertex j = 0; j <m_numVertex; j++){
             if (hasEdge(i, j)){
-                cout << "(" << i << " " << j << " - " << m_edges[i][j] << ") ";
+                cout << "(" << i << " " << j << " " << m_edges[i][j] << ") ";
             }
         }
         //cout << endl;
@@ -158,39 +147,6 @@ bool GraphAdjList::hasEdge(vertex v1, vertex v2){
 }
 
 //O(V) because in worst case it adds on the end of the list
-void GraphAdjList::addEdge(vertex v1, vertex v2){
-    if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex){
-        EdgeNode* node = m_edges[v1]; //Get the list head of edges for that vertex
-        if(node == nullptr || node->vert >= v2){
-            m_edges[v1] = new EdgeNode;
-            m_edges[v1]->next = node;
-            m_edges[v1]->vert = v2;
-            m_edges[v1]->weight = 1;
-            m_numEdges++;
-        } else{
-            while(node->next != nullptr && node->next->vert < v2) {
-                node = node->next;
-            }
-            if(node->next == nullptr && node->vert != v2){
-                node->next = new EdgeNode;
-                node->next->next = nullptr;
-                node->next->vert = v2;
-                node->next->weight = 1;
-                m_numEdges++;
-            }
-            else if (node->next->vert != v2){ //Avoid adding the same vertex two times
-                EdgeNode* newVertex = new EdgeNode;
-                newVertex->vert = v2;
-                newVertex->next = node->next;
-                node->next = newVertex;
-                node->next->weight = 1;
-                m_numEdges++;
-            }
-        }
-    }
-}
-
-//O(V) because in worst case it adds on the end of the list
 void GraphAdjList::addEdge(vertex v1, vertex v2, int weight){
     if(v1 >= 0 && v1 < m_numVertex && v2 >= 0 && v2 <m_numVertex && weight != 0){
         EdgeNode* node = m_edges[v1]; //Get the list head of edges for that vertex
@@ -253,7 +209,7 @@ void GraphAdjList::print(){
     for (vertex i = 0; i < m_numVertex; i++){
         EdgeNode* node = m_edges[i]; //Get the list head of edges for that vertex
         while (node != nullptr) { //And goes printing everything
-            cout << "(" << i << " " << node->vert << " 1) ";
+            cout << "(" << i << " " << node->vert << " " << node->weight << ") " ;
             node = node->next;
         }
     }

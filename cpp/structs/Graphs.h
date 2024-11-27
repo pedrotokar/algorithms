@@ -23,8 +23,7 @@ public:
     int** edges();
 
     bool hasEdge(vertex, vertex); //theta(1) - constant, only acess value in array
-    void addEdge(vertex, vertex); //theta(1)
-    void addEdge(vertex, vertex, int); //theta(1)
+    void addEdge(vertex, vertex, int = 1); //theta(1)
     void removeEdge(vertex, vertex); //theta(1)
 
     void print(); //theta(V^2)
@@ -52,6 +51,10 @@ public:
     void SPT(vertex, vertex[], int[]); //O(V^2)
     void CPTDijkstra(vertex, vertex[], int[]); //O((V^2)log(V))
     bool CPTBellmanFord(vertex, vertex[], int[]); //theta(V^3)
+
+    //MST algorithms
+
+    void prim(vertex[]);
 };
 
 
@@ -67,8 +70,7 @@ public:
     EdgeNode** edges();
 
     bool hasEdge(vertex, vertex); //O(V)
-    void addEdge(vertex, vertex); //O(V)
-    void addEdge(vertex, vertex, int); //O(V)
+    void addEdge(vertex, vertex, int = 1); //O(V)
     void removeEdge(vertex, vertex); //O(V)
 
     void print(); //O(V + E)
@@ -95,6 +97,10 @@ public:
     void SPT(vertex, vertex[], int[]); //O(V + E)
     void CPTDijkstra(vertex, vertex[], int[]); //O((V + E)log(V))
     bool CPTBellmanFord(vertex, vertex[], int[]); //O(VE)
+
+    //MST algorithms
+
+    void prim(vertex[], int = 0);
 };
 
 #endif
