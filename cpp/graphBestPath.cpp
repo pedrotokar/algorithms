@@ -254,7 +254,7 @@ bool GraphAdjList::CPTBellmanFord(vertex v0, vertex parents[], int distance[]){
     return true;
 }
 
-
+/*
 int main(){
     GraphMatrix g1 = GraphMatrix(6);
     g1.addEdge(0, 1, 99);
@@ -340,6 +340,7 @@ int main(){
     g3.addEdge(6, 0, 14);
     g3.addEdge(3, 1, 14);
     g3.addEdge(5, 1, 2);
+
     g3.print();
 
     vertex g3Parents[8];
@@ -540,3 +541,4 @@ int main(){
     cout << "CPT: ";
     printList(g8Parents, 9);
 }
+*/

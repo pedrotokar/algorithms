@@ -54,7 +54,7 @@ public:
 
     //MST algorithms
 
-    void prim(vertex[]);
+    void slowPrim(vertex[], vertex = 0);
 };
 
 
@@ -100,7 +100,7 @@ public:
 
     //MST algorithms
 
-    void prim(vertex[], int = 0);
+    void slowPrim(vertex[], vertex = 0); //O(V^3)
 };
 
 #endif
