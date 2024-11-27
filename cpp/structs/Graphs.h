@@ -55,6 +55,7 @@ public:
     //MST algorithms
 
     void slowPrim(vertex[], vertex = 0);
+    void slowKruskal(vertex[], vertex[]);
 };
 
 
@@ -101,6 +102,7 @@ public:
     //MST algorithms
 
     void slowPrim(vertex[], vertex = 0); //O(V^3)
+    void slowKruskal(vertex[], vertex[]);
 };
 
 #endif
