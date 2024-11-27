@@ -1,6 +1,6 @@
 #include <iostream>
 #include "structs/Graphs.h"
-#define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
+#define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << "]" << endl;}
 
 using namespace std;
 
@@ -158,7 +158,6 @@ void GraphMatrix::bfsTree(vertex v0, int order[], vertex parents[]){
 
 
 //Implements everything but now for adjacency list graphs-------------------------------------------------------
-
 
 
 //O(V + E) -
@@ -322,3 +321,181 @@ void GraphAdjList::bfsTree(vertex v0, int order[], vertex parents[]){
         }
     }
 }
+
+/*
+int main(){
+    GraphMatrix g1 = GraphMatrix(6);
+    g1.addEdge(0, 1);
+    g1.addEdge(0, 2);
+    g1.addEdge(1, 3);
+    g1.addEdge(1, 4);
+    g1.addEdge(2, 4);
+    g1.addEdge(3, 4);
+    g1.addEdge(4, 5);
+    g1.addEdge(4, 1);
+    g1.print();
+    cout << endl;
+
+    cout << "tem caminho de 0 a 5? " << g1.hasPath(0, 5) << endl;
+    cout << "tem caminho de 5 a 2? " << g1.hasPath(5, 2) << endl;
+    cout << "tem caminho de 1 a 4? " << g1.hasPath(1, 4) << endl;
+
+    bool hasPathTo[6];
+    for(int i = 0; i < 6; i++){hasPathTo[i] = false;}
+    g1.findConnected(1, hasPathTo);
+    cout << "1 se conecta para: ";
+    printList(hasPathTo, 6);
+
+    cout << endl <<"Topologia";
+    int topologicalOrdering[6];
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "g1 é topológico? " << g1.isTopological() << endl;
+    cout << "Tem ordenação topológica? " << g1.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+    g1.removeEdge(4, 1);
+    cout << "Agora é topológico? " << g1.isTopological() << endl;
+
+    g1.addEdge(4, 1);
+
+    GraphMatrix g2 = GraphMatrix(6);
+    g2.addEdge(5, 0);
+    g2.addEdge(5, 3);
+    g2.addEdge(5, 4);
+    g2.addEdge(4, 2);
+    g2.addEdge(3, 0);
+    g2.addEdge(3, 1);
+    g2.addEdge(2, 0);
+    g2.addEdge(2, 1);
+
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "g3 tem ordenação topológica? " << g2.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+
+    cout << endl << "DFS: ";
+    int preOrder[6];
+    int postOrder[6];
+    int parents[6];
+    g1.dfs(preOrder, postOrder, parents);
+    cout << endl << "Pré ordem: ";
+    printList(preOrder, 6);
+    cout << "Pós ordem: ";
+    printList(postOrder, 6);
+    cout << "Floresta DFS: ";
+    printList(parents, 6);
+
+    cout << endl << "BFS: ";
+    int bfsOrder[6];
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0;}
+    g1.bfsForest(bfsOrder);
+    cout << endl << "Ordem BFS (completo): ";
+    printList(bfsOrder, 6);
+
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0; parents[i] = 0;}
+    g1.bfsTree(2, bfsOrder, parents);
+    cout << endl << "Ordem BFS (árvore com raiz em 2): ";
+    printList(bfsOrder, 6);
+    cout << "Árvore";
+    printList(parents, 6);
+
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0; parents[i] = 0;}
+    g1.bfsTree(4, bfsOrder, parents);
+    cout << endl << "Ordem BFS (árvore com raiz em 4): ";
+    printList(bfsOrder, 6);
+    cout << "Árvore: ";
+    printList(parents, 6);
+
+    g1.removeEdge(0, 1);
+    g1.removeEdge(0, 2);
+    g1.removeEdge(1, 3);
+    g1.removeEdge(1, 4);
+    g1.removeEdge(2, 4);
+    g1.removeEdge(3, 4);
+    g1.removeEdge(4, 5);
+    g1.removeEdge(4, 1);
+    g1.removeEdge(4, 5);
+
+    cout << endl;
+    cout << "!-- Agora para grafos feitos com listas de adjacência --!" << endl;
+    cout << endl;
+
+    //testing everything again but for adjacency list graphs
+
+    GraphAdjList g3 = GraphAdjList(6);
+    g3.addEdge(0, 1);
+    g3.addEdge(0, 2);
+    g3.addEdge(1, 3);
+    g3.addEdge(1, 4);
+    g3.addEdge(2, 4);
+    g3.addEdge(3, 4);
+    g3.addEdge(4, 5);
+    g3.addEdge(4, 1);
+    g3.print();
+    cout << endl;
+
+    cout << endl;
+    cout << "tem caminho de 0 a 5? " << g3.hasPath(0, 5) << endl;
+    cout << "tem caminho de 5 a 2? " << g3.hasPath(5, 2) << endl;
+    cout << "tem caminho de 1 a 4? " << g3.hasPath(1, 4) << endl;
+
+    for(int i = 0; i < 6; i++){hasPathTo[i] = false;}
+    cout << "1 se conecta para: ";
+    g3.findConnected(1, hasPathTo);
+    printList(hasPathTo, 6);
+
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "g1 é topológico? " << g3.isTopological() << endl;
+    cout << "Tem ordenação topológica? " << g3.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+    g3.removeEdge(4, 1);
+    cout << "Agora é topológico? " << g3.isTopological() << endl;
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+
+    g3.addEdge(4, 1);
+
+    GraphAdjList g4 = GraphAdjList(6);
+    g4.addEdge(5, 0);
+    g4.addEdge(5, 3);
+    g4.addEdge(5, 4);
+    g4.addEdge(4, 2);
+    g4.addEdge(3, 0);
+    g4.addEdge(3, 1);
+    g4.addEdge(2, 0);
+    g4.addEdge(2, 1);
+
+    for(int i = 0; i < 6; i++){topologicalOrdering[i] = -1;}
+    cout << endl << "g4 tem ordenação topológica? " << g4.hasTopologicalOrder(topologicalOrdering) << endl;
+    printList(topologicalOrdering, 6);
+
+
+    cout << endl << "DFS: ";
+    g3.dfs(preOrder, postOrder, parents);
+    cout << endl << "Pré ordem: ";
+    printList(preOrder, 6);
+    cout << "Pós ordem: ";
+    printList(postOrder, 6);
+    cout << "Floresta DFS: ";
+    printList(parents, 6);
+
+    cout << endl << "BFS: ";
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0;}
+    g3.bfsForest(bfsOrder);
+    cout << endl << "Ordem BFS (completo): ";
+    printList(bfsOrder, 6);
+
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0; parents[i] = 0;}
+    g3.bfsTree(2, bfsOrder, parents);
+    cout << endl << "Ordem BFS (árvore com raiz em 2): ";
+    printList(bfsOrder, 6);
+    cout << "Árvore: ";
+    printList(parents, 6);
+
+    for(int i = 0; i < 6; i++){bfsOrder[i] = 0; parents[i] = 0;}
+    g3.bfsTree(4, bfsOrder, parents);
+    cout << endl << "Ordem BFS (árvore com raiz em 4): ";
+    printList(bfsOrder, 6);
+    cout << "Árvore: ";
+    printList(parents, 6);
+
+}
+*/
+
