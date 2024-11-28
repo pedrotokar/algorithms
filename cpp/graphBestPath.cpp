@@ -29,7 +29,7 @@ void GraphMatrix::dagSPT(vertex parents[], int distances[]){
 }
 
 //O(V^2) - almost same thing as a BFS, generates PST from any vertex
-void GraphMatrix::SPT(vertex v0, vertex parents[], int distances[]){
+void GraphMatrix::SPT(vertex v0, vertex parents[], int distances[], int v1){
     const int INF = m_numVertex + 1;
     for(vertex v = 0; v < m_numVertex; v++){distances[v] = INF; parents[v] = -1;}
 
@@ -41,12 +41,13 @@ void GraphMatrix::SPT(vertex v0, vertex parents[], int distances[]){
     parents[v0] = v0;
 
     while(queueEnd > queueStart){
-        vertex v1 = queue[queueStart++];
+        vertex current = queue[queueStart++];
         for(vertex v2 = 0; v2 < m_numVertex; v2++){
-            if (hasEdge(v1,v2) && distances[v2] == INF){
-                distances[v2] = distances[v1] + 1;
-                parents[v2] = v1;
+            if (hasEdge(current, v2) && distances[v2] == INF){
+                distances[v2] = distances[current] + 1;
+                parents[v2] = current;
                 queue[queueEnd++] = v2;
+                if(v1 == v2) return;
             }
         }
     }
@@ -149,7 +150,7 @@ void GraphAdjList::dagSPT(vertex parents[], int distances[]){
 }
 
 //O(V + E) - almost same thing as a BFS, generates PST from any vertex
-void GraphAdjList::SPT(vertex v0, vertex parents[], int distances[]){
+void GraphAdjList::SPT(vertex v0, vertex parents[], int distances[], int v1){
     const int INF = m_numVertex + 1;
     for(vertex v = 0; v < m_numVertex; v++){distances[v] = INF; parents[v] = -1;}
 
@@ -168,6 +169,7 @@ void GraphAdjList::SPT(vertex v0, vertex parents[], int distances[]){
                 distances[node->vert] = distances[current] + 1;
                 parents[node->vert] = current;
                 queue[queueEnd++] = node->vert;
+                if(node->vert == v1) return;
             }
             node = node->next;
         }

@@ -55,6 +55,13 @@ void GraphMatrix::removeEdge(vertex v1, vertex v2){
     }
 }
 
+void GraphMatrix::addEdgesFromTree(vertex tree[]){
+    for(vertex v = 0; v < m_numVertex; v++){
+        if(tree[v] == v) continue;
+        addEdge(tree[v], v);
+    }
+}
+
 //theta(V^2)
 void GraphMatrix::print(){
     cout << m_numEdges << " [ ";
@@ -144,6 +151,13 @@ bool GraphAdjList::hasEdge(vertex v1, vertex v2){
         node = node->next;
     }
     return false;
+}
+
+void GraphAdjList::addEdgesFromTree(vertex tree[]){
+    for(vertex v = 0; v < m_numVertex; v++){
+        if(tree[v] == v) continue;
+        addEdge(tree[v], v);
+    }
 }
 
 //O(V) because in worst case it adds on the end of the list

@@ -25,6 +25,7 @@ public:
     bool hasEdge(vertex, vertex); //theta(1) - constant, only acess value in array
     void addEdge(vertex, vertex, int = 1); //theta(1)
     void removeEdge(vertex, vertex); //theta(1)
+    void addEdgesFromTree(vertex[]);
 
     void print(); //theta(V^2)
     void printMatrix(); //theta(V^2)
@@ -48,7 +49,7 @@ public:
     //Graph minimal path algorithms
 
     void dagSPT(vertex[], int[]); //theta(V^2)
-    void SPT(vertex, vertex[], int[]); //O(V^2)
+    void SPT(vertex, vertex[], int[], int = -1); //O(V^2)
     void CPTDijkstra(vertex, vertex[], int[]); //O((V^2)log(V))
     bool CPTBellmanFord(vertex, vertex[], int[]); //theta(V^3)
 
@@ -73,6 +74,7 @@ public:
     bool hasEdge(vertex, vertex); //O(V)
     void addEdge(vertex, vertex, int = 1); //O(V)
     void removeEdge(vertex, vertex); //O(V)
+    void addEdgesFromTree(vertex[]);
 
     void print(); //O(V + E)
 
@@ -95,7 +97,7 @@ public:
     //Graph minimal path algorithms
 
     void dagSPT(vertex[], int[]); //theta(V + E)
-    void SPT(vertex, vertex[], int[]); //O(V + E)
+    void SPT(vertex, vertex[], int[], int = -1); //O(V + E)
     void CPTDijkstra(vertex, vertex[], int[]); //O((V + E)log(V))
     bool CPTBellmanFord(vertex, vertex[], int[]); //O(VE)
 

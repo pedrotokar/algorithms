@@ -124,7 +124,7 @@ void GraphAdjList::slowKruskal(vertex edges1[], vertex edges2[]){
         }
     }
 }
-
+/*
 int main(){
     GraphMatrix g1 = GraphMatrix(6);
     g1.addEdge(0, 1, 7); g1.addEdge(1, 0, 7);
@@ -189,3 +189,4 @@ int main(){
     printList(edges2, 5);
 
 }
+*/
